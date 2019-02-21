@@ -46,7 +46,6 @@ void find_mtf(node_t** list, int key) {
   }
   node_t* node = *list;
   while(node->next != NULL && node->next->key != key) {
-    printf("Next key: %d\n", node->next->key);
     node = node->next;
     if (node->next == NULL) {
       node = NULL;
