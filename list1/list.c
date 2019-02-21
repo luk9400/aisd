@@ -11,7 +11,7 @@ typedef struct Node {
  */
 void insert(node_t* list, int key) {
   node_t* node = list;
-  // moving to the endo of the list
+  // moving to the end of the list
   while (node->next != NULL) {
     node = node->next;
   }
@@ -21,7 +21,7 @@ void insert(node_t* list, int key) {
 }
 
 /*
- * Return pointer to the first encountered key.
+ * Returns pointer to the first encountered key.
  * If key is not in the list returns NULL.
  */
 node_t* search(node_t* list, int key) {
