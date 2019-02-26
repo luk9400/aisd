@@ -9,8 +9,14 @@ typedef struct Node {
 /*
  * Appends key to the end of the list
  */
-void insert(node_t* list, int key) {
-  node_t* node = list;
+void insert(node_t** list, int key) {
+  if (*list == NULL) {
+    *list = malloc(sizeof(node_t));
+    (*list)->key = key;
+    (*list)->next = NULL;
+    return;
+  }
+  node_t* node = *list;
   // moving to the end of the list
   while (node->next != NULL) {
     node = node->next;
@@ -29,7 +35,7 @@ node_t* search(node_t* list, int key) {
   while (node != NULL && node->key != key) {
     node = node->next;
   }
-  return(node);
+  return node;
 }
 
 void delete(node_t* list, int key) {
@@ -73,6 +79,11 @@ void print_list(node_t* list) {
 }
 
 int main() {
+
+  node_t* head = NULL;
+  insert(&head, 2137);
+
+  /*
   node_t* head = malloc(sizeof(node_t));
   node_t* node1 = malloc(sizeof(node_t));
   node_t* node2 = malloc(sizeof(node_t));
@@ -88,6 +99,7 @@ int main() {
   printf("Magic happens\n");
 
   find_mtf(&head, 3);
+  */
   print_list(head);
 
   return 0;
