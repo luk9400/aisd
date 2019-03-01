@@ -38,8 +38,42 @@ node_t* search(node_t* list, int key) {
   return node;
 }
 
-void delete(node_t* list, int key) {
+/*
+ * Returns 1 if list is empty. Returns 0 otherwise.
+ */
+int is_empty(node_t* list) {
+  return list == NULL ? 1 : 0;
+}
 
+/*
+ * Deletes first encountered node with specified key.
+ */
+void delete(node_t** list, int key) {
+  if (is_empty(*list)) {
+    return;
+  }
+  node_t* node = *list;
+
+  //deleting first element if key fits
+  if ((*list)->key == key) {
+    *list = node->next;
+    free(node);
+    return;
+  }
+
+  while(node->next != NULL && node->next->key != key) {
+    node = node->next;
+    if (node->next == NULL) {
+      node = NULL;
+      break;
+    }
+  }
+  if (node == NULL) {
+    return;
+  }
+  node_t* tmp = node->next;
+  node->next = node->next->next;
+  free(tmp);
 }
 
 /*
@@ -47,6 +81,9 @@ void delete(node_t* list, int key) {
  * If there is no such key in the list it does nothing.
  */
 void find_mtf(node_t** list, int key) {
+  if (is_empty(*list)) {
+    return;
+  }
   if ((*list)->key == key) {
     return;
   }
@@ -81,25 +118,16 @@ void print_list(node_t* list) {
 int main() {
 
   node_t* head = NULL;
-  insert(&head, 2137);
-
-  /*
-  node_t* head = malloc(sizeof(node_t));
-  node_t* node1 = malloc(sizeof(node_t));
-  node_t* node2 = malloc(sizeof(node_t));
-  head->key = 1;
-  head->next = node1;
-  node1->key = 2;
-  node1->next = node2;
-  node2->key = 3;
-  node2->next = NULL;
-  insert(head, 4);
+  //printf("%d\n", is_empty(head));
+  insert(&head, 1);
+  insert(&head, 2);
+  insert(&head, 3);
+  insert(&head, 4);
+  insert(&head, 5);
+  //find_mtf(&head, 2137);
   print_list(head);
 
-  printf("Magic happens\n");
-
-  find_mtf(&head, 3);
-  */
+  delete(&head, 3);
   print_list(head);
 
   return 0;
