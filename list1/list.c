@@ -78,14 +78,15 @@ void delete(node_t** list, int key) {
 
 /*
  * Finds first encountered key and moves it to the beginning of the list.
- * If there is no such key in the list it does nothing.
+ * Then returns 1.
+ * If there is no such key in the list it returns 0.
  */
-void find_mtf(node_t** list, int key) {
+int find_mtf(node_t** list, int key) {
   if (is_empty(*list)) {
-    return;
+    return 0;
   }
   if ((*list)->key == key) {
-    return;
+    return 1;
   }
   node_t* node = *list;
   while(node->next != NULL && node->next->key != key) {
@@ -96,12 +97,53 @@ void find_mtf(node_t** list, int key) {
     }
   }
   if (node == NULL || (node == *list && node->next->key != key)) {
-    return;
+    return 0;
   }
   node_t* tmp = node->next;
   node->next = tmp->next;
   tmp->next = *list;
   *list = tmp;
+  return 1;
+}
+
+/*
+ * Finds first encountered key and moves it one place to the front.
+ * Returns 1 if success or 0 if key wasn't found.
+ */
+int find_trans(node_t** list, int key) {
+  if (is_empty(*list)) {
+    return 0;
+  }
+  // checking first node
+  if ((*list)->key == key) {
+    return 1;
+  }
+  node_t* node = *list;
+  //checking second node
+  if (node->next == NULL) {
+    return 0;
+  } else {
+    if (node->next->key == key) {
+      node_t* tmp = node->next;
+      node->next = tmp->next;
+      tmp->next = *list;
+      *list = tmp;
+      return 1;
+    }
+  }
+  while (node->next->next != NULL) {
+    if (node->next->next->key == key) {
+      node_t* next = node->next->next->next;
+      node_t* found = node->next->next;
+      node->next->next->next = node->next;
+      node->next->next = next;
+      node->next = found;
+      return 1;
+    }
+    node = node->next;
+  }
+
+  return 0;
 }
 
 /*
@@ -126,8 +168,9 @@ int main() {
   insert(&head, 5);
   //find_mtf(&head, 2137);
   print_list(head);
+  find_trans(&head, 6);
 
-  delete(&head, 3);
+  //delete(&head, 3);
   print_list(head);
 
   return 0;
