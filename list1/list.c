@@ -6,7 +6,7 @@ typedef struct Node {
   struct Node* next;
 } node_t;
 
-/*
+/**
  * Appends key to the end of the list
  */
 void insert(node_t** list, int key) {
@@ -26,7 +26,7 @@ void insert(node_t** list, int key) {
   node->next->next = NULL;
 }
 
-/*
+/**
  * Returns pointer to the first encountered key.
  * If key is not in the list returns NULL.
  */
@@ -38,14 +38,14 @@ node_t* search(node_t* list, int key) {
   return node;
 }
 
-/*
+/**
  * Returns 1 if list is empty. Returns 0 otherwise.
  */
 int is_empty(node_t* list) {
   return list == NULL ? 1 : 0;
 }
 
-/*
+/**
  * Deletes first encountered node with specified key.
  */
 void delete(node_t** list, int key) {
@@ -76,7 +76,7 @@ void delete(node_t** list, int key) {
   free(tmp);
 }
 
-/*
+/**
  * Finds first encountered key and moves it to the beginning of the list.
  * Then returns 1.
  * If there is no such key in the list it returns 0.
@@ -106,7 +106,7 @@ int find_mtf(node_t** list, int key) {
   return 1;
 }
 
-/*
+/**
  * Finds first encountered key and moves it one place to the front.
  * Returns 1 if success or 0 if key wasn't found.
  */
@@ -146,7 +146,7 @@ int find_trans(node_t** list, int key) {
   return 0;
 }
 
-/*
+/**
  * Prints the whole list
  */
 void print_list(node_t* list) {
@@ -166,10 +166,9 @@ int main() {
   insert(&head, 3);
   insert(&head, 4);
   insert(&head, 5);
-  //find_mtf(&head, 2137);
   print_list(head);
-  find_trans(&head, 6);
-
+  //find_trans(&head, 6);
+  printf("%d\n", find_mtf(&head, 1));
   //delete(&head, 3);
   print_list(head);
 
