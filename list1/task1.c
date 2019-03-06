@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
+int counter = 0;
 
 typedef struct Node {
   int key;
@@ -59,6 +62,7 @@ void delete(List* list, int key) {
   node_t* node = list->head;
 
   //deleting first element if key fits
+  counter++;
   if (list->head->key == key) {
     list->head = node->next;
     free(node);
@@ -66,6 +70,7 @@ void delete(List* list, int key) {
   }
 
   while(node->next != NULL && node->next->key != key) {
+    counter++;
     node = node->next;
     if (node->next == NULL) {
       node = NULL;
@@ -89,18 +94,17 @@ int find_mtf(List* list, int key) {
   if (is_empty(list)) {
     return 0;
   }
+  counter++;
   if (list->head->key == key) {
     return 1;
   }
   node_t* node = list->head;
   while(node->next != NULL && node->next->key != key) {
+    counter++;
     node = node->next;
-    if (node->next == NULL) {
-      node = NULL;
-      break;
-    }
   }
-  if (node == NULL || (node == list->head && node->next->key != key)) {
+  counter++;
+  if (node->next == NULL) {
     return 0;
   }
   node_t* tmp = node->next;
@@ -119,6 +123,7 @@ int find_trans(List* list, int key) {
     return 0;
   }
   // checking first node
+  counter++;
   if (list->head->key == key) {
     return 1;
   }
@@ -127,6 +132,7 @@ int find_trans(List* list, int key) {
   if (node->next == NULL) {
     return 0;
   } else {
+    counter++;
     if (node->next->key == key) {
       node_t* tmp = node->next;
       node->next = tmp->next;
@@ -136,6 +142,7 @@ int find_trans(List* list, int key) {
     }
   }
   while (node->next->next != NULL) {
+    counter++;
     if (node->next->next->key == key) {
       node_t* next = node->next->next->next;
       node_t* found = node->next->next;
@@ -161,21 +168,74 @@ void print_list(List* list) {
   }
 }
 
+void test(List* list) {
+  // creating tab
+  int randomTab[100];
+  for (int i = 0; i < 100; i++) {
+    randomTab[i] = i+1;
+  }
+  // shuffle
+  srand(time(NULL));
+  for (int i = 0; i < 100; i++) {
+    int randomIndex = rand() % 100;
+    int tmp = randomTab[i];
+    randomTab[i] = randomTab[randomIndex];
+    randomTab[randomIndex] = tmp;
+  }
+  // inserting into the list
+  for (int i = 0; i < 100; i++) {
+    insert(list, randomTab[i]);
+  }
+
+  // counting trans
+  counter = 0;
+  while(!is_empty(list)) {
+    int max;
+    for (int i = 0; i < 100; i++) {
+      if (find_trans(list, i + 1)) {
+        max = i + 1;
+      }
+    }
+    delete(list, max);
+  }
+  printf("TRANS: %d\n", counter);
+  // inserting into the list
+  for (int i = 0; i < 100; i++) {
+    insert(list, randomTab[i]);
+  }
+
+  // counting mtf
+  counter = 0;
+  while(!is_empty(list)) {
+    int max;
+    for (int i = 0; i < 100; i++) {
+      if (find_mtf(list, i + 1)) {
+        max = i + 1;
+      }
+    }
+    delete(list, max);
+  }
+  printf("MTF: %d\n", counter);
+}
+
 int main() {
 
   List list = {NULL};
+  test(&list);
   //printf("%d\n", is_empty(&list));
-  insert(&list, 1);
-  insert(&list, 2);
-  insert(&list, 3);
-  insert(&list, 4);
-  insert(&list, 5);
-  print_list(&list);
+  //insert(&list, 1);
+  //insert(&list, 2);
+  //insert(&list, 3);
+  //insert(&list, 4);
+  //insert(&list, 5);
+  //print_list(&list);
   //printf("%d\n", is_empty(&list));
   //find_trans(&list, 5);
-  printf("%d\n", find_mtf(&list, 5));
+  //find_mtf(&list, 2);
+  //printf("%d\n", find_mtf(&list, 5));
   //delete(&list, 1);
-  print_list(&list);
+  //printf("%d\n", is_empty(&list));
+  //print_list(&list);
 
   return 0;
 }
