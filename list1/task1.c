@@ -35,15 +35,14 @@ void insert(List* list, int key) {
 
 /**
  * Returns pointer to the first encountered key.
- * If key is not in the list returns -1.
+ * If key is not in the list returns NULL.
  */
 node_t* search(List* list, int key) {
   node_t* node = list->head;
   while (node != NULL && node->key != key) {
     node = node->next;
   }
-
-  return node == NULL ? -1 : node;
+  return node;
 }
 
 /**
