@@ -34,6 +34,16 @@ void insert(List* list, int key) {
 }
 
 /**
+ * Inserts key to the beginning of the list
+ */
+void insert_front(List* list, int key) {
+  node_t* node = malloc(sizeof(node_t));
+  node->key = key;
+  node->next = list->head;
+  list->head = node;
+}
+
+/**
  * Returns pointer to the first encountered key.
  * If key is not in the list returns NULL.
  */
