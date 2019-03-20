@@ -25,9 +25,14 @@ int select_sort(int* tab, int size, int (*compare)(int, int)) {
   }
 }
 
-int insert_sort(int* tab, int size) {
-  for (int i = 0; i < size; i++) {
-
+int insert_sort(int* tab, int size, int (*compare)(int, int)) {
+  for (int i = 1; i < size; i++) {
+    int j = i - 1;
+    int value = tab[i];
+    for ( ; j >= 0 && (*compare)(value, tab[j]); j--) {
+      tab[j + 1] = tab[j];
+    }
+    tab[j + 1] = value;
   }
 }
 
@@ -43,14 +48,15 @@ int main() {
   tab[0] = 2;
   tab[1] = 1;
   tab[2] = 1;
-  tab[3] = 3;
-  tab[4] = 7;
+  tab[3] = 7;
+  tab[4] = 3;
 
   // for (int i = 0; i < 1000; i++) {
   //   tab[i] = i;
   // }
 
-  select_sort(tab, size, &less);
+  //select_sort(tab, size, &less);
+  insert_sort(tab, size, &greater);
 
   print_tab(tab, size);
 
