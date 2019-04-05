@@ -7,7 +7,6 @@ char type_flag = '0';
 int desc_flag = 0;
 int stat_flag = 0;
 
-
 int greater(int a, int b) {
   return a > b;
 }
@@ -16,20 +15,34 @@ int less(int a,int b) {
   return a < b;
 }
 
+int greater_or_equal(int a, int b) {
+  return a >= b;
+}
+
+int less_or_equal(int a, int b) {
+  return a <= b;
+}
+
 int select_sort(int* tab, int size, int (*compare)(int, int)) {
+  // comparations and swaps
+  int stats[] = {0, 0};
+
   for (int i = 0; i < size - 1; i++) {
     int min = i;
     for (int j = i + 1; j < size; j++) {
+      stats[0]++;
       if ((*compare)(tab[j], tab[min])) {
         min = j;
       }
     }
     if (min != i) {
+      stats[1]++;
       int tmp = tab[i];
       tab[i] = tab[min];
       tab[min] = tmp;
     }
   }
+  //return stats;
 }
 
 int insert_sort(int* tab, int size, int (*compare)(int, int)) {
@@ -126,19 +139,27 @@ int heap_sort(int* tab, int size, int (*compare)(int, int)) {
 }
 
 void print_tab(int* tab, int size) {
+  printf("[");
   for (int i = 0; i < size; i++) {
-    printf("%d\n", tab[i]);
+    if (i == size - 1) {
+      printf("%d", tab[i]);
+    } else {
+      printf("%d, ", tab[i]);
+    }
   }
+  printf("]\n");
+}
+
+int is_sorted(int* tab, int size, int (*compare)(int, int)) {
+  for (int i = 0; i < size - 1; i++) {
+    if (!(*compare)(tab[i], tab[i + 1])) {
+      return 0;
+    }
+  }
+  return 1;
 }
 
 int main(int argc, char** argv) {
-  // int size = 5;
-  // int* tab = malloc(size * sizeof(int));
-  // tab[0] = 2;
-  // tab[1] = 1;
-  // tab[2] = 1;
-  // tab[3] = 7;
-  // tab[4] = 3;
 
   int c;
   int option_index;
@@ -187,7 +208,7 @@ int main(int argc, char** argv) {
   }
 
   if (stat_flag) {
-
+    // TODO
   } else {
     int size;
     printf("How many elements do you wish to sort?\n");
@@ -197,7 +218,7 @@ int main(int argc, char** argv) {
     for (int i = 0; i < size; i++) {
       scanf("%d", &tab[i]);
     }
-
+    int* stats;
     switch (type_flag) {
       case 's': {
         if (desc_flag) {
@@ -240,8 +261,14 @@ int main(int argc, char** argv) {
         break;
       }
     }
-    printf("Sorted:\n");
+    if (desc_flag) {
+      printf("Is sorted: %d\n", is_sorted(tab, size, &greater_or_equal));
+    } else {
+      printf("Is sorted: %d\n", is_sorted(tab, size, &less_or_equal));
+    }
+    printf("Sorted %d elements:\n", size);
     print_tab(tab, size);
+    //printf("Comparations: %d, swaps: %d\n", stats[0], stats[1]);
   }
 
   return 0;
