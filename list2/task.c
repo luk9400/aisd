@@ -36,6 +36,37 @@ int insert_sort(int* tab, int size, int (*compare)(int, int)) {
   }
 }
 
+int partition(int* tab, int p , int r, int (*compare)(int, int)) {
+  int x = tab[p];
+  int i = p;
+  int j = r;
+  while (1) {
+    while (!(*compare)(tab[j], x) && tab[j] != x) {
+      j--;
+    }
+    while ((*compare)(tab[i], x)) {
+      i++;
+    }
+    if (i < j) {
+      int tmp = tab[i];
+      tab[i] = tab[j];
+      tab[j] = tmp;
+      i++;
+      j--;
+    } else {
+      return j;
+    }
+  }
+}
+
+int quick_sort(int* tab, int p, int r, int (*compare)(int, int)) {
+  if (p < r) {
+    int q = partition(tab, p, r, (*compare));
+    quick_sort(tab, p, q, (*compare));
+    quick_sort(tab, q + 1, r, (*compare));
+  }
+}
+
 void print_tab(int* tab, int size) {
   for (int i = 0; i < size; i++) {
     printf("%d\n", tab[i]);
@@ -56,7 +87,8 @@ int main() {
   // }
 
   //select_sort(tab, size, &less);
-  insert_sort(tab, size, &greater);
+  //insert_sort(tab, size, &less);
+  quick_sort(tab, 0, size - 1, &less);
 
   print_tab(tab, size);
 
