@@ -67,6 +67,53 @@ int quick_sort(int* tab, int p, int r, int (*compare)(int, int)) {
   }
 }
 
+static inline int parent(int i) {
+  return i >> 1;
+}
+
+static inline int left(int i) {
+  return (i << 1) + 1;
+}
+
+static inline int right(int i) {
+  return (i << 1) + 2;
+}
+
+int heapify(int* tab, int i, int size, int (*compare)(int, int)) {
+  int l = left(i);
+  int r = right(i);
+  int largest = i;
+  if (l < size && (*compare)(tab[l], tab[largest])) {
+    largest = l;
+  }
+  if (r < size && (*compare)(tab[r], tab[largest])) {
+    largest = r;
+  }
+  if (largest != i) {
+    int tmp = tab[i];
+    tab[i] = tab[largest];
+    tab[largest] = tmp;
+    heapify(tab, largest, size, (*compare));
+  }
+}
+
+int build_heap(int* tab, int size, int (*compare)(int, int)) {
+  for (int i = (size >> 1) - 1; i >= 0; i--) {
+    heapify(tab, i, size, (*compare));
+  }
+}
+
+int heap_sort(int* tab, int size, int (*compare)(int, int)) {
+  build_heap(tab, size, (*compare));
+  for (int i = size - 1; i >= 0; i--) {
+    int tmp = tab[i];
+    tab[i] = tab[0];
+    tab[0] = tmp;
+    size--;
+    heapify(tab, 0, size, (*compare));
+  }
+}
+
 void print_tab(int* tab, int size) {
   for (int i = 0; i < size; i++) {
     printf("%d\n", tab[i]);
@@ -88,7 +135,8 @@ int main() {
 
   //select_sort(tab, size, &less);
   //insert_sort(tab, size, &less);
-  quick_sort(tab, 0, size - 1, &less);
+  //quick_sort(tab, 0, size - 1, &less);
+  heap_sort(tab, size, &greater);
 
   print_tab(tab, size);
 
