@@ -74,6 +74,10 @@ int quick_sort(int* tab, int p, int r, int (*compare)(int, int)) {
   }
 }
 
+int mquick_sort(int* tab, int p, int r, int (*compare)(int, int)) {
+
+}
+
 static inline int parent(int i) {
   return i >> 1;
 }
@@ -127,7 +131,7 @@ void print_tab(int* tab, int size) {
   }
 }
 
-int main() {
+int main(int argc, char** argv) {
   // int size = 5;
   // int* tab = malloc(size * sizeof(int));
   // tab[0] = 2;
@@ -138,7 +142,7 @@ int main() {
 
   int c;
   int option_index;
-  struct option long_options[] = {
+  static struct option long_options[] = {
     {"asc", no_argument, 0, 'a'},
     {"desc", no_argument, 0, 'd'},
     {"type", required_argument, 0, 't'},
@@ -177,78 +181,68 @@ int main() {
         break;
       }
       default: {
+        abort();
+      }
+    }
+  }
+
+  if (stat_flag) {
+
+  } else {
+    int size;
+    printf("How many elements do you wish to sort?\n");
+    scanf("%d", &size);
+    int* tab = malloc(size * sizeof(int));
+    printf("What elements?\n");
+    for (int i = 0; i < size; i++) {
+      scanf("%d", &tab[i]);
+    }
+
+    switch (type_flag) {
+      case 's': {
+        if (desc_flag) {
+          select_sort(tab, size, &greater);
+        } else {
+          select_sort(tab, size, &less);
+        }
+        break;
+      }
+      case 'i': {
+        if (desc_flag) {
+          insert_sort(tab, size, &greater);
+        } else {
+          insert_sort(tab, size, &less);
+        }
+        break;
+      }
+      case 'q': {
+        if (desc_flag) {
+          quick_sort(tab, 0, size - 1, &greater);
+        } else {
+          quick_sort(tab, 0, size - 1, &less);
+        }
+        break;
+      }
+      case 'h': {
+        if (desc_flag) {
+          heap_sort(tab, size, &less);
+        } else {
+          heap_sort(tab, size, &greater);
+        }
+        break;
+      }
+      case 'm': {
+        if (desc_flag) {
+          mquick_sort(tab, 0, size - 1, &greater);
+        } else {
+          mquick_sort(tab, 0, size - 1, &less);
+        }
         break;
       }
     }
-
-    if (stat_flag) {
-
-    } else {
-      int size;
-      printf("How many elements do you wish to sort?\n");
-      scanf("%d\n", &size);
-      int* tab = malloc(size * sizeof(int));
-      printf("What elements?\n");
-      for (int i = 0; i < size; i++) {
-        scanf("%d\n", tab[i]);
-      }
-
-      switch (type_flag) {
-        case 's': {
-          if (desc_flag) {
-            select_sort(tab, size, &less);
-          } else {
-            select_sort(tab, size, &greater);
-          }
-          break;
-        }
-        case 'i': {
-          if (desc_flag) {
-            insert_sort(tab, size, &less);
-          } else {
-            insert_sort(tab, size, &greater);
-          }
-          break;
-        }
-        case 's': {
-          if (desc_flag) {
-            select_sort(tab, size, &less);
-          } else {
-            select_sort(tab, size, &greater);
-          }
-          break;
-        }
-        case 's': {
-          if (desc_flag) {
-            select_sort(tab, size, &less);
-          } else {
-            select_sort(tab, size, &greater);
-          }
-          break;
-        }
-        case 's': {
-          if (desc_flag) {
-            select_sort(tab, size, &less);
-          } else {
-            select_sort(tab, size, &greater);
-          }
-          break;
-        }
-      }
-      print_tab(tab, size);
-    }
-
+    printf("Sorted:\n");
+    print_tab(tab, size);
   }
-  // for (int i = 0; i < 1000; i++) {
-  //   tab[i] = i;
-  // }
-
-  //select_sort(tab, size, &less);
-  //insert_sort(tab, size, &less);
-  //quick_sort(tab, 0, size - 1, &less);
-  //heap_sort(tab, size, &greater);
-
-  //print_tab(tab, size);
 
   return 0;
 }
