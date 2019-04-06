@@ -11,9 +11,9 @@ int desc_flag = 0;
 int stat_flag = 0;
 
 typedef struct Stats {
+  double time;
   int comparations;
   int swaps;
-  double time;
 } Stats;
 
 int greater(int a, int b) {
@@ -376,11 +376,17 @@ int main(int argc, char** argv) {
       fprintf(f, "\n");
 
       free(random_array);
+      printf("random_array freed, n: %d\n", n);
       free(array);
+      printf("array freed, n: %d\n", n);
     }
-    free(stats);
-    free(avg_stats);
+    printf("Przed\n");
     fclose(f);
+    printf("Po\n");
+    //free(stats);
+    printf("stats freed\n");
+    //free(avg_stats);
+    printf("avg_stats freed\n");
   } else if (type_flag != '0'){
     int size;
     printf("How many elements do you wish to sort?\n");
