@@ -2,10 +2,19 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <string.h>
+#include <time.h>
+#include <unistd.h>
+#include <sys/time.h>
 
 char type_flag = '0';
 int desc_flag = 0;
 int stat_flag = 0;
+
+typedef struct Stats {
+  int comparations;
+  int swaps;
+  double time;
+} Stats;
 
 int greater(int a, int b) {
   return a > b;
@@ -23,26 +32,33 @@ int less_or_equal(int a, int b) {
   return a <= b;
 }
 
-int select_sort(int* tab, int size, int (*compare)(int, int)) {
-  // comparations and swaps
-  int stats[] = {0, 0};
-
+void select_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
+  struct timeval begin;
+  struct timeval end;
+  gettimeofday(&begin, NULL);
+  clock_t begin1 = clock();
   for (int i = 0; i < size - 1; i++) {
     int min = i;
     for (int j = i + 1; j < size; j++) {
-      stats[0]++;
+      stats->comparations++;
       if ((*compare)(tab[j], tab[min])) {
         min = j;
       }
     }
     if (min != i) {
-      stats[1]++;
+      stats->swaps++;
       int tmp = tab[i];
       tab[i] = tab[min];
       tab[min] = tmp;
     }
   }
-  //return stats;
+  gettimeofday(&end, NULL);
+  clock_t end1 = clock();
+  printf("Time begin: %d, time end: %d, clps: %d\n", begin1, end1, CLOCKS_PER_SEC);
+  printf("Time begin: %d, time end: %d\n", begin.tv_sec, end.tv_sec);
+  printf("Time begin: %d, time end: %d\n", begin.tv_usec, end.tv_usec);
+  printf("This took: %f\n", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0);
+  stats->time = (double)(end1 - begin1) / CLOCKS_PER_SEC;
 }
 
 int insert_sort(int* tab, int size, int (*compare)(int, int)) {
@@ -159,6 +175,10 @@ int is_sorted(int* tab, int size, int (*compare)(int, int)) {
   return 1;
 }
 
+void print_stats(Stats* stats) {
+  printf("Comparations: %d\nSwaps: %d\nTime: %f\n", stats->comparations, stats->swaps, stats->time);
+}
+
 int main(int argc, char** argv) {
 
   int c;
@@ -218,13 +238,13 @@ int main(int argc, char** argv) {
     for (int i = 0; i < size; i++) {
       scanf("%d", &tab[i]);
     }
-    int* stats;
+    Stats stats = {0, 0, 0};
     switch (type_flag) {
       case 's': {
         if (desc_flag) {
-          select_sort(tab, size, &greater);
+          select_sort(tab, size, &greater, &stats);
         } else {
-          select_sort(tab, size, &less);
+          select_sort(tab, size, &less, &stats);
         }
         break;
       }
@@ -268,7 +288,7 @@ int main(int argc, char** argv) {
     }
     printf("Sorted %d elements:\n", size);
     print_tab(tab, size);
-    //printf("Comparations: %d, swaps: %d\n", stats[0], stats[1]);
+    print_stats(&stats);
   }
 
   return 0;
