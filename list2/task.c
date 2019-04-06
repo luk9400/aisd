@@ -55,7 +55,7 @@ void select_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
   stats->time = (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
 
-int insert_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
+void insert_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
   struct timeval begin;
   struct timeval end;
   gettimeofday(&begin, NULL);
@@ -103,7 +103,7 @@ int partition(int* tab, int p , int r, int (*compare)(int, int), Stats* stats) {
   }
 }
 
-int quick_sort(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
+void quick_sort(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
   struct timeval begin;
   struct timeval end;
   gettimeofday(&begin, NULL);
@@ -146,7 +146,7 @@ int m_partition(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) 
   }
 }
 
-int minsert_sort(int* tab, int first, int size, int (*compare)(int, int), Stats* stats) {
+void minsert_sort(int* tab, int first, int size, int (*compare)(int, int), Stats* stats) {
   for (int i = first + 1; i < size; i++) {
     int j = i - 1;
     int value = tab[i];
@@ -161,12 +161,12 @@ int minsert_sort(int* tab, int first, int size, int (*compare)(int, int), Stats*
   }
 }
 
-int mquick_sort(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
+void mquick_sort(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
   struct timeval begin;
   struct timeval end;
   gettimeofday(&begin, NULL);
 
-  if (r - p < 16) {
+  if (r - p <= 16) {
     minsert_sort(tab, p, r + 1, (*compare), stats);
   } else {
     int q = m_partition(tab, p, r, (*compare), stats);
@@ -190,7 +190,7 @@ static inline int right(int i) {
   return (i << 1) + 2;
 }
 
-int heapify(int* tab, int i, int size, int (*compare)(int, int), Stats* stats) {
+void heapify(int* tab, int i, int size, int (*compare)(int, int), Stats* stats) {
   int l = left(i);
   int r = right(i);
   int largest = i;
@@ -211,13 +211,13 @@ int heapify(int* tab, int i, int size, int (*compare)(int, int), Stats* stats) {
   }
 }
 
-int build_heap(int* tab, int size, int (*compare)(int, int), Stats* stats) {
+void build_heap(int* tab, int size, int (*compare)(int, int), Stats* stats) {
   for (int i = (size >> 1) - 1; i >= 0; i--) {
     heapify(tab, i, size, (*compare), stats);
   }
 }
 
-int heap_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
+void heap_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
   struct timeval begin;
   struct timeval end;
   gettimeofday(&begin, NULL);
@@ -255,6 +255,12 @@ int is_sorted(int* tab, int size, int (*compare)(int, int)) {
   return 1;
 }
 
+void init_stats(Stats* stats) {
+  stats->comparations = 0;
+  stats->swaps = 0;
+  stats->time = 0;
+}
+
 void print_stats(Stats* stats) {
   printf("Comparations: %d\nSwaps: %d\nTime: %f\n", stats->comparations, stats->swaps, stats->time);
 }
@@ -264,6 +270,9 @@ int main(int argc, char** argv) {
   srand(time(NULL));
   int c;
   int option_index;
+  char* file_name;
+  FILE* f;
+  int k;
   static struct option long_options[] = {
     {"asc", no_argument, 0, 'a'},
     {"desc", no_argument, 0, 'd'},
@@ -285,7 +294,9 @@ int main(int argc, char** argv) {
         break;
       }
       case 's': {
-        // TODO
+        stat_flag = 1;
+        file_name = strdup(argv[optind - 1]);
+        k = atoi(strdup(argv[optind]));
         break;
       }
       case 't': {
@@ -309,7 +320,67 @@ int main(int argc, char** argv) {
   }
 
   if (stat_flag) {
-    // TODO
+    f = fopen(file_name, "w");
+    fprintf(f, "n");
+    char* algorithms[5] = {"select", "insert", "heap", "quick", "mquick"};
+    for (int i = 0; i < 5; i++) {
+      fprintf(f, ";%s - comparations;%s - swaps;%s - time;%s - comparations/n;%s - swaps/n", algorithms[i], algorithms[i], algorithms[i], algorithms[i], algorithms[i]);
+    }
+    fprintf(f , "\n");
+    Stats* stats = malloc(5 * sizeof(Stats));
+    Stats* avg_stats = malloc(5 * sizeof(Stats));
+    for (int n = 100; n <= 10000; n = n + 100) {
+      int* random_array = malloc(n * sizeof(int));
+      int* array = malloc(n * sizeof(int));
+      for (int i = 0; i < 5; i++) {
+        init_stats(&avg_stats[i]);
+      }
+      for (int i = 0; i < k; i++) {
+        for (int j = 0; j < n; j++) {
+          random_array[j] = rand() % 100;
+        }
+        for (int j = 0; j < 5; j++) {
+          init_stats(&stats[i]);
+        }
+
+        memcpy(array, random_array, n);
+        select_sort(array, n, &less, &stats[0]);
+
+        memcpy(array, random_array, n);
+        insert_sort(array, n, &less, &stats[1]);
+
+        memcpy(array, random_array, n);
+        heap_sort(array, n, &greater, &stats[2]);
+
+        memcpy(array, random_array, n);
+        quick_sort(array, 0, n - 1, &less, &stats[3]);
+
+        memcpy(array, random_array, n);
+        mquick_sort(array, 0, n - 1, &less, &stats[4]);
+
+        for (int j = 0; j < 5; j++) {
+          avg_stats[j].comparations += stats[j].comparations;
+          avg_stats[j].swaps += stats[j].swaps;
+          avg_stats[j].time += stats[j].time;
+        }
+      }
+      fprintf(f, "%d", n);
+      for (int i = 0; i < 5; i++) {
+        int c = avg_stats[i].comparations / k;
+        int s = avg_stats[i].swaps / k;
+        double t = avg_stats[i].time / k;
+        int cn = c / n;
+        int sn = s / n;
+        fprintf(f, ";%d;%d;%f;%d;%d", c, s, t, cn, sn);
+      }
+      fprintf(f, "\n");
+
+      free(random_array);
+      free(array);
+    }
+    free(stats);
+    free(avg_stats);
+    fclose(f);
   } else if (type_flag != '0'){
     int size;
     printf("How many elements do you wish to sort?\n");
