@@ -54,10 +54,10 @@ void select_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
   }
   gettimeofday(&end, NULL);
   clock_t end1 = clock();
-  printf("Time begin: %d, time end: %d, clps: %d\n", begin1, end1, CLOCKS_PER_SEC);
-  printf("Time begin: %d, time end: %d\n", begin.tv_sec, end.tv_sec);
-  printf("Time begin: %d, time end: %d\n", begin.tv_usec, end.tv_usec);
-  printf("This took: %f\n", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0);
+  printf("Time begin: %ld, time end: %ld, clps: %ld\n", begin1, end1, CLOCKS_PER_SEC);
+  printf("Time begin: %ld s, time end: %ld s\n", begin.tv_sec, end.tv_sec);
+  printf("Time begin: %ld us, time end: %ld us\n", begin.tv_usec, end.tv_usec);
+  printf("This took (GtoD): %f\n", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0);
   stats->time = (double)(end1 - begin1) / CLOCKS_PER_SEC;
 }
 
@@ -229,7 +229,7 @@ int main(int argc, char** argv) {
 
   if (stat_flag) {
     // TODO
-  } else {
+  } else if (type_flag != '0'){
     int size;
     printf("How many elements do you wish to sort?\n");
     scanf("%d", &size);
