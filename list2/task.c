@@ -58,32 +58,46 @@ void select_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
   printf("Time begin: %ld s, time end: %ld s\n", begin.tv_sec, end.tv_sec);
   printf("Time begin: %ld us, time end: %ld us\n", begin.tv_usec, end.tv_usec);
   printf("This took (GtoD): %f\n", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0);
-  stats->time = (double)(end1 - begin1) / CLOCKS_PER_SEC;
+  stats->time = (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
 
-int insert_sort(int* tab, int size, int (*compare)(int, int)) {
+int insert_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
+  struct timeval begin;
+  struct timeval end;
+  gettimeofday(&begin, NULL);
   for (int i = 1; i < size; i++) {
     int j = i - 1;
     int value = tab[i];
+    stats->comparations++;
     for ( ; j >= 0 && (*compare)(value, tab[j]); j--) {
+      stats->comparations++;
+      stats->swaps++;
       tab[j + 1] = tab[j];
     }
+    stats->swaps++;
     tab[j + 1] = value;
   }
+  gettimeofday(&end, NULL);
+  stats->time = (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
 
-int partition(int* tab, int p , int r, int (*compare)(int, int)) {
+int partition(int* tab, int p , int r, int (*compare)(int, int), Stats* stats) {
   int x = tab[p];
   int i = p;
   int j = r;
   while (1) {
+    stats->comparations++;
     while (!(*compare)(tab[j], x) && tab[j] != x) {
+      stats->comparations++;
       j--;
     }
+    stats->comparations++;
     while ((*compare)(tab[i], x)) {
+      stats->comparations++;
       i++;
     }
     if (i < j) {
+      stats->swaps++;
       int tmp = tab[i];
       tab[i] = tab[j];
       tab[j] = tmp;
@@ -95,16 +109,26 @@ int partition(int* tab, int p , int r, int (*compare)(int, int)) {
   }
 }
 
-int quick_sort(int* tab, int p, int r, int (*compare)(int, int)) {
+int quick_sort(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
+  struct timeval begin;
+  struct timeval end;
+  gettimeofday(&begin, NULL);
   if (p < r) {
-    int q = partition(tab, p, r, (*compare));
-    quick_sort(tab, p, q, (*compare));
-    quick_sort(tab, q + 1, r, (*compare));
+    int q = partition(tab, p, r, (*compare), stats);
+    quick_sort(tab, p, q, (*compare), stats);
+    quick_sort(tab, q + 1, r, (*compare), stats);
   }
+  gettimeofday(&end, NULL);
+  stats->time = (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
 
-int mquick_sort(int* tab, int p, int r, int (*compare)(int, int)) {
-
+int mquick_sort(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
+  struct timeval begin;
+  struct timeval end;
+  gettimeofday(&begin, NULL);
+  // TODO
+  gettimeofday(&end, NULL);
+  stats->time += (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
 
 static inline int parent(int i) {
@@ -119,39 +143,48 @@ static inline int right(int i) {
   return (i << 1) + 2;
 }
 
-int heapify(int* tab, int i, int size, int (*compare)(int, int)) {
+int heapify(int* tab, int i, int size, int (*compare)(int, int), Stats* stats) {
   int l = left(i);
   int r = right(i);
   int largest = i;
+  stats->comparations++;
   if (l < size && (*compare)(tab[l], tab[largest])) {
     largest = l;
   }
+  stats->comparations++;
   if (r < size && (*compare)(tab[r], tab[largest])) {
     largest = r;
   }
   if (largest != i) {
+    stats->swaps++;
     int tmp = tab[i];
     tab[i] = tab[largest];
     tab[largest] = tmp;
-    heapify(tab, largest, size, (*compare));
+    heapify(tab, largest, size, (*compare), stats);
   }
 }
 
-int build_heap(int* tab, int size, int (*compare)(int, int)) {
+int build_heap(int* tab, int size, int (*compare)(int, int), Stats* stats) {
   for (int i = (size >> 1) - 1; i >= 0; i--) {
-    heapify(tab, i, size, (*compare));
+    heapify(tab, i, size, (*compare), stats);
   }
 }
 
-int heap_sort(int* tab, int size, int (*compare)(int, int)) {
-  build_heap(tab, size, (*compare));
+int heap_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
+  struct timeval begin;
+  struct timeval end;
+  gettimeofday(&begin, NULL);
+  build_heap(tab, size, (*compare), stats);
   for (int i = size - 1; i >= 0; i--) {
+    stats->swaps++;
     int tmp = tab[i];
     tab[i] = tab[0];
     tab[0] = tmp;
     size--;
-    heapify(tab, 0, size, (*compare));
+    heapify(tab, 0, size, (*compare), stats);
   }
+  gettimeofday(&end, NULL);
+  stats->time += (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
 
 void print_tab(int* tab, int size) {
@@ -250,33 +283,33 @@ int main(int argc, char** argv) {
       }
       case 'i': {
         if (desc_flag) {
-          insert_sort(tab, size, &greater);
+          insert_sort(tab, size, &greater, &stats);
         } else {
-          insert_sort(tab, size, &less);
+          insert_sort(tab, size, &less, &stats);
         }
         break;
       }
       case 'q': {
         if (desc_flag) {
-          quick_sort(tab, 0, size - 1, &greater);
+          quick_sort(tab, 0, size - 1, &greater, &stats);
         } else {
-          quick_sort(tab, 0, size - 1, &less);
+          quick_sort(tab, 0, size - 1, &less, &stats);
         }
         break;
       }
       case 'h': {
         if (desc_flag) {
-          heap_sort(tab, size, &less);
+          heap_sort(tab, size, &less, &stats);
         } else {
-          heap_sort(tab, size, &greater);
+          heap_sort(tab, size, &greater, &stats);
         }
         break;
       }
       case 'm': {
         if (desc_flag) {
-          mquick_sort(tab, 0, size - 1, &greater);
+          mquick_sort(tab, 0, size - 1, &greater, &stats);
         } else {
-          mquick_sort(tab, 0, size - 1, &less);
+          mquick_sort(tab, 0, size - 1, &less, &stats);
         }
         break;
       }
