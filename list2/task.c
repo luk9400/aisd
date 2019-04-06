@@ -36,7 +36,6 @@ void select_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
   struct timeval begin;
   struct timeval end;
   gettimeofday(&begin, NULL);
-  clock_t begin1 = clock();
   for (int i = 0; i < size - 1; i++) {
     int min = i;
     for (int j = i + 1; j < size; j++) {
@@ -53,11 +52,6 @@ void select_sort(int* tab, int size, int (*compare)(int, int), Stats* stats) {
     }
   }
   gettimeofday(&end, NULL);
-  clock_t end1 = clock();
-  printf("Time begin: %ld, time end: %ld, clps: %ld\n", begin1, end1, CLOCKS_PER_SEC);
-  printf("Time begin: %ld s, time end: %ld s\n", begin.tv_sec, end.tv_sec);
-  printf("Time begin: %ld us, time end: %ld us\n", begin.tv_usec, end.tv_usec);
-  printf("This took (GtoD): %f\n", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0);
   stats->time = (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
 
@@ -122,13 +116,66 @@ int quick_sort(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
   stats->time = (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
 
+int m_partition(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
+  int median[] = {tab[p], tab[(p + r) >> 1], tab[r]};
+  insert_sort(median, 3, &less, stats);
+  int x = median[1];
+  int i = p;
+  int j = r;
+  while (1) {
+    stats->comparations++;
+    while (!(*compare)(tab[j], x) && tab[j] != x) {
+      stats->comparations++;
+      j--;
+    }
+    stats->comparations++;
+    while ((*compare)(tab[i], x)) {
+      stats->comparations++;
+      i++;
+    }
+    if (i < j) {
+      stats->swaps++;
+      int tmp = tab[i];
+      tab[i] = tab[j];
+      tab[j] = tmp;
+      i++;
+      j--;
+    } else {
+      return j;
+    }
+  }
+}
+
+int minsert_sort(int* tab, int first, int size, int (*compare)(int, int), Stats* stats) {
+  for (int i = first + 1; i < size; i++) {
+    int j = i - 1;
+    int value = tab[i];
+    stats->comparations++;
+    for ( ; j >= 0 && (*compare)(value, tab[j]); j--) {
+      stats->comparations++;
+      stats->swaps++;
+      tab[j + 1] = tab[j];
+    }
+    stats->swaps++;
+    tab[j + 1] = value;
+  }
+}
+
 int mquick_sort(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
   struct timeval begin;
   struct timeval end;
   gettimeofday(&begin, NULL);
-  // TODO
+
+  if (r - p < 16) {
+    minsert_sort(tab, p, r + 1, (*compare), stats);
+  } else {
+    int q = m_partition(tab, p, r, (*compare), stats);
+    mquick_sort(tab, p, q, (*compare), stats);
+    mquick_sort(tab, q + 1, r, (*compare), stats);
+  }
+
   gettimeofday(&end, NULL);
-  stats->time += (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
+  stats->time = (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
 
 static inline int parent(int i) {
@@ -214,6 +261,7 @@ void print_stats(Stats* stats) {
 
 int main(int argc, char** argv) {
 
+  srand(time(NULL));
   int c;
   int option_index;
   static struct option long_options[] = {
