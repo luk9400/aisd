@@ -178,15 +178,15 @@ void mquick_sort(int* tab, int p, int r, int (*compare)(int, int), Stats* stats)
   stats->time = (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
 
-static inline int parent(int i) {
+int parent(int i) {
   return i >> 1;
 }
 
-static inline int left(int i) {
+int left(int i) {
   return (i << 1) + 1;
 }
 
-static inline int right(int i) {
+int right(int i) {
   return (i << 1) + 2;
 }
 
@@ -340,7 +340,7 @@ int main(int argc, char** argv) {
           random_array[j] = rand() % 100;
         }
         for (int j = 0; j < 5; j++) {
-          init_stats(&stats[i]);
+          init_stats(&stats[j]);
         }
 
         memcpy(array, random_array, n);
@@ -383,9 +383,9 @@ int main(int argc, char** argv) {
     printf("Przed\n");
     fclose(f);
     printf("Po\n");
-    //free(stats);
+    free(stats);
     printf("stats freed\n");
-    //free(avg_stats);
+    free(avg_stats);
     printf("avg_stats freed\n");
   } else if (type_flag != '0'){
     int size;
