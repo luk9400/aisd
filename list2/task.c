@@ -104,14 +104,18 @@ int partition(int* tab, int p , int r, int (*compare)(int, int), Stats* stats) {
 }
 
 void quick_sort(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
-  struct timeval begin;
-  struct timeval end;
-  gettimeofday(&begin, NULL);
   if (p < r) {
     int q = partition(tab, p, r, (*compare), stats);
     quick_sort(tab, p, q, (*compare), stats);
     quick_sort(tab, q + 1, r, (*compare), stats);
   }
+}
+
+void quick(int* tab, int p, int r, int (*compare)(int, int), Stats* stats) {
+  struct timeval begin;
+  struct timeval end;
+  gettimeofday(&begin, NULL);
+  quick_sort(tab, p, r, (*compare), stats);
   gettimeofday(&end, NULL);
   stats->time = (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000000.0;
 }
@@ -353,15 +357,15 @@ int main(int argc, char** argv) {
         heap_sort(array, n, &greater, &stats[2]);
 
         memcpy(array, random_array, n);
-        quick_sort(array, 0, n - 1, &less, &stats[3]);
+        quick(array, 0, n - 1, &less, &stats[3]);
 
         memcpy(array, random_array, n);
         mquick_sort(array, 0, n - 1, &less, &stats[4]);
 
         for (int j = 0; j < 5; j++) {
-          avg_stats[j].comparations += stats[j].comparations;
-          avg_stats[j].swaps += stats[j].swaps;
-          avg_stats[j].time += stats[j].time;
+          avg_stats[j].comparations += (stats[j].comparations - avg_stats[j].comparations) / (i + 1);
+          avg_stats[j].swaps += (stats[j].swaps - avg_stats[j].swaps) / (i + 1);
+          avg_stats[j].time += (stats[j].time - avg_stats[j].time) / (i + 1);
         }
       }
       fprintf(f, "%d", n);
@@ -380,9 +384,7 @@ int main(int argc, char** argv) {
       free(array);
       printf("array freed, n: %d\n", n);
     }
-    printf("Przed\n");
     fclose(f);
-    printf("Po\n");
     free(stats);
     printf("stats freed\n");
     free(avg_stats);
