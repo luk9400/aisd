@@ -363,9 +363,12 @@ int main(int argc, char** argv) {
         mquick_sort(array, 0, n - 1, &less, &stats[4]);
 
         for (int j = 0; j < 5; j++) {
-          avg_stats[j].comparations += (stats[j].comparations - avg_stats[j].comparations) / (i + 1);
-          avg_stats[j].swaps += (stats[j].swaps - avg_stats[j].swaps) / (i + 1);
-          avg_stats[j].time += (stats[j].time - avg_stats[j].time) / (i + 1);
+          // avg_stats[j].comparations += (stats[j].comparations - avg_stats[j].comparations) / (i + 1);
+          // avg_stats[j].swaps += (stats[j].swaps - avg_stats[j].swaps) / (i + 1);
+          // avg_stats[j].time += (stats[j].time - avg_stats[j].time) / (i + 1);
+           avg_stats[j].comparations += stats[j].comparations / k;
+           avg_stats[j].swaps += stats[j].swaps / k;
+           avg_stats[j].time += stats[j].time / k;
         }
       }
       fprintf(f, "%d", n);
@@ -418,9 +421,9 @@ int main(int argc, char** argv) {
       }
       case 'q': {
         if (desc_flag) {
-          quick_sort(tab, 0, size - 1, &greater, &stats);
+          quick(tab, 0, size - 1, &greater, &stats);
         } else {
-          quick_sort(tab, 0, size - 1, &less, &stats);
+          quick(tab, 0, size - 1, &less, &stats);
         }
         break;
       }
