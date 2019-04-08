@@ -341,7 +341,7 @@ int main(int argc, char** argv) {
       }
       for (int i = 0; i < k; i++) {
         for (int j = 0; j < n; j++) {
-          random_array[j] = rand() % 100;
+          random_array[j] = rand();
         }
         for (int j = 0; j < 5; j++) {
           init_stats(&stats[j]);
@@ -373,9 +373,9 @@ int main(int argc, char** argv) {
       }
       fprintf(f, "%d", n);
       for (int i = 0; i < 5; i++) {
-        int c = avg_stats[i].comparations / k;
-        int s = avg_stats[i].swaps / k;
-        double t = avg_stats[i].time / k;
+        int c = avg_stats[i].comparations;
+        int s = avg_stats[i].swaps;
+        double t = avg_stats[i].time;
         int cn = c / n;
         int sn = s / n;
         fprintf(f, ";%d;%d;%f;%d;%d", c, s, t, cn, sn);
