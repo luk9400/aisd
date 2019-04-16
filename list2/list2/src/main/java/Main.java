@@ -1,8 +1,8 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
 
@@ -11,7 +11,7 @@ public class Main {
 
   char type_flag = '0';
   boolean desc_flag = false;
-  int stat_flag = 0;
+  boolean stat_flag = false;
 
   boolean greater(int a, int b) {
     return a > b;
@@ -31,9 +31,9 @@ public class Main {
   
   boolean compare(boolean flag, int a, int b) {
     if (desc_flag) {
-      return a < b;
-    } else {
       return a > b;
+    } else {
+      return a < b;
     }
   }
 
@@ -237,82 +237,174 @@ public class Main {
 
   void printTab(int[] tab) {
     for (int i = 0; i < tab.length; i++) {
-      System.out.println(tab[i]);
+      System.out.print(tab[i] + ", ");
     }
+    System.out.println();
+  }
+
+  boolean isSorted(int[] tab) {
+    if (desc_flag) {
+      for (int i = 0; i < tab.length - 1; i++) {
+        if (tab[i] < tab[i + 1]) {
+          return false;
+        }
+      }
+    } else {
+      for (int i = 0; i < tab.length - 1; i++) {
+        if (tab[i] > tab[i + 1]) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   public static void main(String[] args) {
     Main main = new Main();
-
-    String fileName = "k10.csv";
-    int k = 10;
-
-    Random random = new Random();
-    String[] algs = new String[]{"select", "insert", "heap", "quick", "mquick"};
+    String fileName = "";
+    int k = 0;
 
     try {
-      BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-      writer.write("n");
-      for (int i = 0; i < 5; i++) {
-        writer.write(";" + algs[i] + " - comparations;" + algs[i] + " - swaps;" + algs[i] + " - time;" + algs[i] + " - comparations/n;" + algs[i] + " - swaps/n");
+      int l = 0;
+      while (l < args.length) {
+        if (args[l].equals("--stat")) {
+          main.stat_flag = true;
+          fileName = args[l + 1];
+          k = Integer.parseInt(args[l + 2]);
+          break;
+        }
+        if (args[l].equals("--type")) {
+          if (args[l + 1].equals("insert")) {
+            main.type_flag = 'i';
+          }
+          if (args[l + 1].equals("select")) {
+            main.type_flag = 's';
+          }
+          if (args[l + 1].equals("quick")) {
+            main.type_flag = 'q';
+          }
+          if (args[l + 1].equals("mquick")) {
+            main.type_flag = 'm';
+          }
+          if (args[l + 1].equals("heap")) {
+            main.type_flag = 'h';
+          }
+        }
+        if (args[l].equals("--asc")) {
+          main.desc_flag = false;
+        }
+        if (args[l].equals("--desc")) {
+          main.desc_flag = true;
+        }
+        l++;
       }
-      writer.write("\n");
-
-      for (int n = 100; n <= 10000; n+=100) {
-        main.rand_tab = new int[n];
-        main.tab = new int[n];
-
-        Stats[] avg_stats = new Stats[5];
-        for (int i = 0; i < 5; i++) {
-          avg_stats[i] = new Stats();
-        }
-        for (int i = 0; i < k; i++) {
-          for (int j = 0; j < n; j++) {
-            main.rand_tab[j] = random.nextInt();
-          }
-          Stats[] stats = new Stats[5];
-          for (int j = 0; j < 5; j++) {
-            stats[j] = new Stats();
-          }
-
-          main.tab = main.rand_tab.clone();
-          main.select_sort(main.tab, main.tab.length, stats[0]);
-
-          main.tab = main.rand_tab.clone();
-          main.insert_sort(main.tab, main.tab.length, stats[1]);
-
-          main.tab = main.rand_tab.clone();
-          main.heap_sort(main.tab, main.tab.length, stats[2]);
-
-          main.tab = main.rand_tab.clone();
-          main.quick(main.tab, 0, main.tab.length - 1, stats[3]);
-
-          main.tab = main.rand_tab.clone();
-          main.mquick(main.tab, 0, main.tab.length - 1, stats[4]);
-
-          for(int j = 0; j < 5; j++) {
-            avg_stats[j].comparations += stats[j].comparations / k;
-            avg_stats[j].swaps += stats[j].swaps / k;
-            avg_stats[j].time += stats[j].time / k;
-          }
-        }
-        writer.write("" + n);
-        for (int i = 0; i < 5; i++) {
-          int c = avg_stats[i].comparations;
-          int s = avg_stats[i].swaps;
-          long t = avg_stats[i].time;
-          int cn = c / n;
-          int sn = s / n;
-          writer.write(";" + c + ";" + s + ";" + t + ";" + cn + ";" + sn);
-        }
-        writer.write("\n");
-        System.out.println(n);
-      }
-      writer.close();
-    } catch (IOException e) {
+    } catch (IndexOutOfBoundsException e) {
       e.printStackTrace();
+      System.exit(1);
     }
 
 
+    if (main.stat_flag) {
+      Random random = new Random();
+      String[] algs = new String[]{"select", "insert", "heap", "quick", "mquick"};
+
+      try {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+        writer.write("n");
+        for (int i = 0; i < 5; i++) {
+          writer.write(";" + algs[i] + " - comparations;" + algs[i] + " - swaps;" + algs[i] + " - time;" + algs[i] + " - comparations/n;" + algs[i] + " - swaps/n");
+        }
+        writer.write("\n");
+
+        for (int n = 100; n <= 10000; n += 100) {
+          main.rand_tab = new int[n];
+          main.tab = new int[n];
+
+          Stats[] avg_stats = new Stats[5];
+          for (int i = 0; i < 5; i++) {
+            avg_stats[i] = new Stats();
+          }
+          for (int i = 0; i < k; i++) {
+            for (int j = 0; j < n; j++) {
+              main.rand_tab[j] = random.nextInt();
+            }
+            Stats[] stats = new Stats[5];
+            for (int j = 0; j < 5; j++) {
+              stats[j] = new Stats();
+            }
+
+            main.tab = main.rand_tab.clone();
+            main.select_sort(main.tab, main.tab.length, stats[0]);
+
+            main.tab = main.rand_tab.clone();
+            main.insert_sort(main.tab, main.tab.length, stats[1]);
+
+            main.tab = main.rand_tab.clone();
+            main.heap_sort(main.tab, main.tab.length, stats[2]);
+
+            main.tab = main.rand_tab.clone();
+            main.quick(main.tab, 0, main.tab.length - 1, stats[3]);
+
+            main.tab = main.rand_tab.clone();
+            main.mquick(main.tab, 0, main.tab.length - 1, stats[4]);
+
+            for (int j = 0; j < 5; j++) {
+              avg_stats[j].comparations += stats[j].comparations / k;
+              avg_stats[j].swaps += stats[j].swaps / k;
+              avg_stats[j].time += stats[j].time / k;
+            }
+          }
+          writer.write("" + n);
+          for (int i = 0; i < 5; i++) {
+            int c = avg_stats[i].comparations;
+            int s = avg_stats[i].swaps;
+            long t = avg_stats[i].time;
+            int cn = c / n;
+            int sn = s / n;
+            writer.write(";" + c + ";" + s + ";" + t + ";" + cn + ";" + sn);
+          }
+          writer.write("\n");
+          System.out.println(n);
+        }
+        writer.close();
+        System.exit(0);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    } else if (main.type_flag != '0') {
+      Scanner scanner = new Scanner(System.in);
+      System.out.println("How many elements do you wish to sort?");
+      int size = scanner.nextInt();
+      int[] tab = new int[size];
+      System.out.println("What elements?");
+      for (int i = 0; i < size; i++) {
+        tab[i] = scanner.nextInt();
+      }
+      Stats stats = new Stats();
+      switch (main.type_flag) {
+        case 'i': {
+          main.insert_sort(tab, tab.length, stats);
+          break;
+        }
+        case 's': {
+          main.select_sort(tab, tab.length, stats);
+          break;
+        }
+        case 'q': {
+          main.quick(tab, 0, tab.length - 1, stats);
+          break;
+        }
+        case 'm': {
+          main.mquick(tab, 0, tab.length - 1, stats);
+          break;
+        }
+        case 'h': {
+          main.heap_sort(tab, tab.length, stats);
+          break;
+        }
+      }
+      System.out.println("Is sorted: " + main.isSorted(tab));
+      main.printTab(tab);
+    }
   }
 }
