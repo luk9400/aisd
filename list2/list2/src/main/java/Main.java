@@ -238,9 +238,9 @@ public class Main {
   void printTab(int[] tab) {
     System.out.print("[");
     for (int i = 0; i < tab.length; i++) {
-      System.out.println(tab[i]);
+      System.out.print(tab[i] + ", ");
     }
-    System.out.print("]\n");
+    System.out.println("]");
   }
 
   boolean isSorted(int[] tab) {
@@ -384,11 +384,11 @@ public class Main {
       Stats stats = new Stats();
       switch (main.type_flag) {
         case 'i': {
-          main.insert_sort(tab, tab.length, stats);
+          main.insert_sort(tab, stats);
           break;
         }
         case 's': {
-          main.select_sort(tab, tab.length, stats);
+          main.select_sort(tab, stats);
           break;
         }
         case 'q': {
