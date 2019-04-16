@@ -37,11 +37,11 @@ public class Main {
     }
   }
 
-  void select_sort(int[] tab, int size, Stats stats) {
+  void select_sort(int[] tab, Stats stats) {
     long start = System.nanoTime();
-    for (int i = 0; i < size - 1; i++) {
+    for (int i = 0; i < tab.length - 1; i++) {
       int min = i;
-      for (int j = i + 1; j < size; j++) {
+      for (int j = i + 1; j < tab.length; j++) {
         stats.comparations++;
         if (compare(desc_flag, tab[j], tab[min])) {
           min = j;
@@ -58,9 +58,9 @@ public class Main {
     stats.time = end - start;
   }
 
-  void insert_sort(int[] tab, int size, Stats stats) {
+  void insert_sort(int[] tab, Stats stats) {
     long start = System.nanoTime();
-    for (int i = 1; i < size; i++) {
+    for (int i = 1; i < tab.length; i++) {
       int j = i - 1;
       int value = tab[i];
       stats.comparations++;
@@ -121,7 +121,7 @@ public class Main {
 
   int m_partition(int[] tab, int p, int r, Stats stats) {
     int median[] = {tab[p], tab[(p + r) >> 1], tab[r]};
-    insert_sort(median, 3, stats);
+    insert_sort(median, stats);
     int x = median[1];
     int i = p;
     int j = r;
@@ -236,10 +236,11 @@ public class Main {
   }
 
   void printTab(int[] tab) {
+    System.out.print("[");
     for (int i = 0; i < tab.length; i++) {
-      System.out.print(tab[i] + ", ");
+      System.out.println(tab[i]);
     }
-    System.out.println();
+    System.out.print("]\n");
   }
 
   boolean isSorted(int[] tab) {
@@ -333,11 +334,11 @@ public class Main {
               stats[j] = new Stats();
             }
 
-            main.tab = main.rand_tab.clone();
-            main.select_sort(main.tab, main.tab.length, stats[0]);
+          main.tab = main.rand_tab.clone();
+          main.select_sort(main.tab, stats[0]);
 
-            main.tab = main.rand_tab.clone();
-            main.insert_sort(main.tab, main.tab.length, stats[1]);
+          main.tab = main.rand_tab.clone();
+          main.insert_sort(main.tab, stats[1]);
 
             main.tab = main.rand_tab.clone();
             main.heap_sort(main.tab, main.tab.length, stats[2]);
