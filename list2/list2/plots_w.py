@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-data = pd.read_csv('k100.csv', delimiter=';')
+data = pd.read_csv('k1000.csv', delimiter=';')
 plots = ['comparations', 'swaps', 'time']
 x = data['n']
 
