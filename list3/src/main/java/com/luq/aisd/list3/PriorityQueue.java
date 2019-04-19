@@ -46,12 +46,6 @@ public class PriorityQueue {
     }
   }
 
-  private void buildHeap(int size) {
-    for (int i = (size >> 1) - 1; i >= 0; i--) {
-      heapify(i);
-    }
-  }
-
   public Node pop() {
     if (size < 1) {
       System.out.println("Pop: null");
@@ -71,7 +65,6 @@ public class PriorityQueue {
     size++;
     int i = size - 1;
     while (i > 0 && list.get(parent(i)).getPriority() > node.getPriority()) {
-      //list.add(i, list.get(parent(i)));
       Collections.swap(list, i - 1, parent(i));
       i = parent(i);
     }
