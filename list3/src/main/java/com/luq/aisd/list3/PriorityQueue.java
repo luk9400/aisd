@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 /**
- *  Priority queue implemented with a binary heap
+ * Priority queue implemented with a binary heap
  */
 public class PriorityQueue {
   private ArrayList<Node> list = new ArrayList<>();
@@ -67,12 +67,8 @@ public class PriorityQueue {
     map.put(key, size);
     Node node = new Node(key, priority);
     size++;
-    int i = size - 1;
-    while (i > 0 && list.get(parent(i)).getPriority() > node.getPriority()) {
-      swap(i - 1, parent(i));
-      i = parent(i);
-    }
-    list.add(i, node);
+    list.add(size - 1, node);
+    decreaseKey(size - 1, priority);
   }
 
   public Node top() {
@@ -101,5 +97,23 @@ public class PriorityQueue {
     map.replace(list.get(i).getKey(), j);
     map.replace(list.get(j).getKey(), i);
     Collections.swap(list, i, j);
+  }
+
+  public void decreaseKey(int i, float priority) {
+    if (priority > list.get(i).getPriority()) {
+      return;
+    }
+    list.get(i).setPriority(priority);
+    while (i >= 0 && list.get(parent(i)).getPriority() > list.get(i).getPriority()) {
+      swap(i, parent(i));
+      i = parent(i);
+    }
+  }
+
+  public void priority(int key, float priority) {
+    if (map.get(key) != null) {
+      int index = map.get(key);
+      decreaseKey(index, priority);
+    }
   }
 }
