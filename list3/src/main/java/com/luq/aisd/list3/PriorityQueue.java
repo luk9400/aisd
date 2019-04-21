@@ -2,13 +2,15 @@ package com.luq.aisd.list3;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 /**
- *  Priority queue implemented with binary heap
+ *  Priority queue implemented with a binary heap
  */
 public class PriorityQueue {
-  private ArrayList<Node> list = new ArrayList<Node>();
+  private ArrayList<Node> list = new ArrayList<>();
   private int size = 0;
+  private HashMap<Integer, Integer> map = new HashMap<>();
 
   public ArrayList<Node> getQueue() {
     return list;
@@ -41,7 +43,7 @@ public class PriorityQueue {
       smallest = r;
     }
     if (smallest != i) {
-      Collections.swap(list, i, smallest);
+      swap(i, smallest);
       heapify(smallest);
     }
   }
@@ -57,15 +59,17 @@ public class PriorityQueue {
     size--;
     heapify(0);
     System.out.println("Pop: " + max.getKey() + " " + max.getPriority());
+    map.remove(max.getKey());
     return max;
   }
 
   public void insert(int key, float priority) {
+    map.put(key, size);
     Node node = new Node(key, priority);
     size++;
     int i = size - 1;
     while (i > 0 && list.get(parent(i)).getPriority() > node.getPriority()) {
-      Collections.swap(list, i - 1, parent(i));
+      swap(i - 1, parent(i));
       i = parent(i);
     }
     list.add(i, node);
@@ -90,5 +94,12 @@ public class PriorityQueue {
       System.out.print("(" + i.getKey() + ", " + i.getPriority() + ") ");
     }
     System.out.println();
+    System.out.println(map.toString());
+  }
+
+  private void swap(int i, int j) {
+    map.replace(list.get(i).getKey(), j);
+    map.replace(list.get(j).getKey(), i);
+    Collections.swap(list, i, j);
   }
 }
