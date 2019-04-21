@@ -63,7 +63,7 @@ public class PriorityQueue {
     return max;
   }
 
-  public void insert(int key, float priority) {
+  public void insert(int key, int priority) {
     map.put(key, size);
     Node node = new Node(key, priority);
     size++;
@@ -99,7 +99,7 @@ public class PriorityQueue {
     Collections.swap(list, i, j);
   }
 
-  public void decreaseKey(int i, float priority) {
+  public void decreaseKey(int i, int priority) {
     if (priority > list.get(i).getPriority()) {
       return;
     }
@@ -110,7 +110,7 @@ public class PriorityQueue {
     }
   }
 
-  public void priority(int key, float priority) {
+  public void priority(int key, int priority) {
     if (map.get(key) != null) {
       int index = map.get(key);
       decreaseKey(index, priority);

@@ -2,9 +2,9 @@ package com.luq.aisd.list3;
 
 public class Node {
   private int key;
-  private float priority;
+  private int priority;
 
-  public Node(int key, float priority) {
+  public Node(int key, int priority) {
     this.key = key;
     this.priority = priority;
   }
@@ -17,11 +17,11 @@ public class Node {
     this.key = key;
   }
 
-  public float getPriority() {
+  public int getPriority() {
     return priority;
   }
 
-  public void setPriority(float priority) {
+  public void setPriority(int priority) {
     this.priority = priority;
   }
 }
