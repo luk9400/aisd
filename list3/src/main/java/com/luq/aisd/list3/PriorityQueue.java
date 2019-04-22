@@ -116,4 +116,8 @@ public class PriorityQueue {
       decreaseKey(index, priority);
     }
   }
+
+  public boolean contains(int key) {
+    return map.get(key) != null;
+  }
 }

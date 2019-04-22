@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Main {
 
-  private static void dijkstra() {
+  private static WeightGraph getGraph() {
     Scanner scanner = null;
     try {
       scanner = new Scanner(new File("./graph.txt"));
@@ -18,7 +18,7 @@ public class Main {
     System.out.println("Number of edges:");
     int e = scanner.nextInt();
 
-    Graph graph = new Graph(numOfVerticies);
+    WeightGraph graph = new WeightGraph(numOfVerticies);
 
     for (int i = 0; i < e; i++) {
       int u, v, w;
@@ -27,6 +27,13 @@ public class Main {
       w = scanner.nextInt();
       graph.addEdge(u, v, w);
     }
+
+    return graph;
+  }
+
+  private static void dijkstra() {
+    WeightGraph graph = getGraph();
+    Scanner scanner = new Scanner(System.in);
 
     System.out.println("Starting vertex:");
     int start = scanner.nextInt();
@@ -81,8 +88,26 @@ public class Main {
     }
   }
 
+  public static void kruskal() {
+    WeightGraph graph = getGraph();
+
+    Kruskal kruskal = new Kruskal(graph);
+
+    kruskal.kruskal();
+  }
+
+  public static void prim() {
+    WeightGraph graph = getGraph();
+
+    Prim prim = new Prim(graph);
+
+    prim.prim(0);
+  }
+
   public static void main(String[] args) {
     //dijkstra();
-    priorityQueue();
+    //priorityQueue();
+    //kruskal();
+    prim();
   }
 }

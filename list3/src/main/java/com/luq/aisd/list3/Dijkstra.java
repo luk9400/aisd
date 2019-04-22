@@ -7,9 +7,9 @@ public class Dijkstra {
   private PriorityQueue queue = new PriorityQueue();
   private Integer[] prev;
   private Integer[] distance;
-  private Graph graph;
+  private WeightGraph graph;
 
-  public Dijkstra(Graph graph) {
+  public Dijkstra(WeightGraph graph) {
     this.graph = graph;
     prev = new Integer[graph.getV()];
     distance = new Integer[graph.getV()];
