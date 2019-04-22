@@ -17,6 +17,7 @@ public class Prim extends MST {
     keys[root] = 0;
     queue.priority(root, keys[root]);
     parent[root] = null;
+    int sumOfWeights = 0;
     while (!queue.isEmpty()) {
       int u = queue.top().getKey();
       for (Edge edge : graph.getVerticies().get(u)) {
@@ -24,9 +25,12 @@ public class Prim extends MST {
           parent[edge.getV()] = edge.getU();
           keys[edge.getV()] = edge.getWeight();
           queue.priority(edge.getV(), keys[edge.getV()]);
+          System.out.println("u: " + u + ", v: " + edge.getV() + ", w: " + edge.getWeight());
+          sumOfWeights += edge.getWeight();
         }
       }
       queue.pop();
     }
+    System.out.println("Sum of weights: " + sumOfWeights);
   }
 }
