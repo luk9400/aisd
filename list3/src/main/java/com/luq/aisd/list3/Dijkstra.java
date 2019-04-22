@@ -16,6 +16,7 @@ public class Dijkstra {
   }
 
   public void dijkstra(int start) {
+    long startTime = System.nanoTime();
     initializeSingleSource(start);
 
     for (int i = 0; i < graph.getV(); i++) {
@@ -30,6 +31,17 @@ public class Dijkstra {
       }
       queue.pop();
       System.out.println("Id: " + u + ", weight: " + distance[u]);
+      printPath(u);
+    }
+    System.err.println("Time: " + (System.nanoTime() - startTime) + "ns");
+  }
+
+  public void printPath(int u) {
+    System.err.print("(" + u + ", " + distance[u] + ")" + " ");
+    if (prev[u] != null) {
+      printPath(prev[u]);
+    } else {
+      System.err.println();
     }
   }
 

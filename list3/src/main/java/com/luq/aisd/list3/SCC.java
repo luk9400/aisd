@@ -1,7 +1,6 @@
 package com.luq.aisd.list3;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SCC {
   private char[] color;
@@ -35,15 +34,15 @@ public class SCC {
   private void dfsVisitVerbose(Graph graph, int u) {
     color[u] = 'g';
     System.out.print(u + " ");
-    d[u] = ++time;
+    //d[u] = ++time;
     for (Edge edge : graph.getVerticies().get(u)) {
       if (color[edge.getV()] == 'w') {
         prev[edge.getV()] = u;
-        dfsVisit(graph, edge.getV());
+        dfsVisitVerbose(graph, edge.getV());
       }
     }
     color[u] = 'b';
-    f[u] = ++time;
+    //f[u] = ++time;
   }
 
   public void dfs(Graph graph) {
@@ -81,10 +80,8 @@ public class SCC {
     time = 0;
     PriorityQueue queue = new PriorityQueue();
     for (int i = 0; i < graph.getV(); i++) {
-      queue.insert(i, f[i]);
+      queue.insert(i, -f[i]);
     }
-    System.out.println(Arrays.toString(f));
-    queue.printQueue();
     while (!queue.isEmpty()) {
       int u = queue.pop().getKey();
       if (color[u] == 'w') {
@@ -95,9 +92,11 @@ public class SCC {
   }
 
   public void scc() {
+    long startTime = System.nanoTime();
     dfs(graph);
     Graph transposedGraph = graph.transpose();
     dfsTrans(transposedGraph);
+    System.err.println("Time: " + (System.nanoTime() - startTime) + "ns");
   }
 
   public ArrayList<Integer> topologicalSort(Graph graph) {

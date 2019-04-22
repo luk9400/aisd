@@ -13,9 +13,9 @@ public class Main {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
-    System.out.println("Number of verticies:");
+    //System.out.println("Number of verticies:");
     int numOfVerticies = scanner.nextInt();
-    System.out.println("Number of edges:");
+    //System.out.println("Number of edges:");
     int e = scanner.nextInt();
 
     Graph graph = new Graph(numOfVerticies);
@@ -114,10 +114,10 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    dijkstra();
+    //dijkstra();
     //priorityQueue();
     //kruskal();
     //prim();
-    //ssc();
+    ssc();
   }
 }
