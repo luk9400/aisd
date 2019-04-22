@@ -6,10 +6,10 @@ import java.util.Scanner;
 
 public class Main {
 
-  private static WeightGraph getGraph() {
+  private static Graph getGraph() {
     Scanner scanner = null;
     try {
-      scanner = new Scanner(new File("./graph.txt"));
+      scanner = new Scanner(new File("./graph2.txt"));
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
@@ -18,21 +18,22 @@ public class Main {
     System.out.println("Number of edges:");
     int e = scanner.nextInt();
 
-    WeightGraph graph = new WeightGraph(numOfVerticies);
+    Graph graph = new Graph(numOfVerticies);
 
     for (int i = 0; i < e; i++) {
       int u, v, w;
       u = scanner.nextInt();
       v = scanner.nextInt();
       w = scanner.nextInt();
-      graph.addEdge(u, v, w);
+      graph.addWeightEdge(u, v, w);
+      //graph.addEdge(u, v);
     }
 
     return graph;
   }
 
   private static void dijkstra() {
-    WeightGraph graph = getGraph();
+    Graph graph = getGraph();
     Scanner scanner = new Scanner(System.in);
 
     System.out.println("Starting vertex:");
@@ -89,7 +90,7 @@ public class Main {
   }
 
   public static void kruskal() {
-    WeightGraph graph = getGraph();
+    Graph graph = getGraph();
 
     Kruskal kruskal = new Kruskal(graph);
 
@@ -97,17 +98,26 @@ public class Main {
   }
 
   public static void prim() {
-    WeightGraph graph = getGraph();
+    Graph graph = getGraph();
 
     Prim prim = new Prim(graph);
 
     prim.prim(0);
   }
 
+  public static void ssc() {
+    Graph graph = getGraph();
+    SCC ssc = new SCC(graph);
+
+    ssc.scc();
+
+  }
+
   public static void main(String[] args) {
-    //dijkstra();
+    dijkstra();
     //priorityQueue();
     //kruskal();
-    prim();
+    //prim();
+    //ssc();
   }
 }

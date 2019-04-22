@@ -11,6 +11,11 @@ public class Edge {
     this.weight = weight;
   }
 
+  public Edge(int u, int v) {
+    this.u = u;
+    this.v = v;
+  }
+
   public int getU() {
     return u;
   }

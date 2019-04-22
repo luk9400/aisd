@@ -3,10 +3,10 @@ package com.luq.aisd.list3;
 public class MST {
   protected int[] rank;
   protected Integer[] parent;
-  protected WeightGraph A;
-  protected WeightGraph graph;
+  protected Graph A;
+  protected Graph graph;
 
-  protected MST(WeightGraph graph) {
+  protected MST(Graph graph) {
     this.graph = graph;
     rank = new int[graph.getV()];
     parent = new Integer[graph.getV()];

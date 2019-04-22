@@ -3,7 +3,7 @@ package com.luq.aisd.list3;
 public class Prim extends MST {
   private int[] keys;
 
-  public Prim(WeightGraph graph) {
+  public Prim(Graph graph) {
     super(graph);
     keys = new int[graph.getV()];
   }

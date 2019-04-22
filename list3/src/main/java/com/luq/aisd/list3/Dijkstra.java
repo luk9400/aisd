@@ -7,9 +7,9 @@ public class Dijkstra {
   private PriorityQueue queue = new PriorityQueue();
   private Integer[] prev;
   private Integer[] distance;
-  private WeightGraph graph;
+  private Graph graph;
 
-  public Dijkstra(WeightGraph graph) {
+  public Dijkstra(Graph graph) {
     this.graph = graph;
     prev = new Integer[graph.getV()];
     distance = new Integer[graph.getV()];
@@ -30,7 +30,6 @@ public class Dijkstra {
       }
       queue.pop();
       System.out.println("Id: " + u + ", weight: " + distance[u]);
-      System.out.println(set.toString());
     }
   }
 

@@ -2,12 +2,12 @@ package com.luq.aisd.list3;
 
 import java.util.ArrayList;
 
-public class WeightGraph {
+public class Graph {
   private ArrayList<ArrayList<Edge>> verticies = new ArrayList<>();
   private int e;
   private int v;
 
-  public WeightGraph(int numOfVertices) {
+  public Graph(int numOfVertices) {
     v = numOfVertices;
     e = 0;
     for (int i = 0; i < v; i++) {
@@ -15,8 +15,14 @@ public class WeightGraph {
     }
   }
 
-  public void addEdge(int u, int v, int weight) {
+  public void addWeightEdge(int u, int v, int weight) {
     Edge edge = new Edge(u, v, weight);
+    verticies.get(u).add(edge);
+    e++;
+  }
+
+  public void addEdge(int u, int v) {
+    Edge edge = new Edge(u, v);
     verticies.get(u).add(edge);
     e++;
   }
@@ -50,5 +56,15 @@ public class WeightGraph {
       }
     }
     return sum;
+  }
+
+  public Graph transpose() {
+    Graph newGraph = new Graph(v);
+    for (int i = 0; i < v; i++) {
+      for (Edge edge : verticies.get(i)) {
+        newGraph.addEdge(edge.getV(), edge.getU());
+      }
+    }
+    return newGraph;
   }
 }
