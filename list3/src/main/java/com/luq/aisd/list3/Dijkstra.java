@@ -6,13 +6,13 @@ public class Dijkstra {
   private ArrayList<Integer> set = new ArrayList<>();
   private PriorityQueue queue = new PriorityQueue();
   private Integer[] prev;
-  private Integer[] distance;
+  private Float[] distance;
   private Graph graph;
 
   public Dijkstra(Graph graph) {
     this.graph = graph;
     prev = new Integer[graph.getV()];
-    distance = new Integer[graph.getV()];
+    distance = new Float[graph.getV()];
   }
 
   public void dijkstra(int start) {
@@ -47,10 +47,10 @@ public class Dijkstra {
 
   private void initializeSingleSource(int start) {
     for (int i = 0; i < graph.getV(); i++) {
-      distance[i] = Integer.MAX_VALUE;
+      distance[i] = Float.MAX_VALUE;
       prev[i] = null;
     }
-    distance[start] = 0;
+    distance[start] = 0f;
   }
 
   private void relax(Edge edge) {

@@ -1,11 +1,11 @@
 package com.luq.aisd.list3;
 
 public class Prim extends MST {
-  private int[] keys;
+  private float[] keys;
 
   public Prim(Graph graph) {
     super(graph);
-    keys = new int[graph.getV()];
+    keys = new float[graph.getV()];
   }
 
   public void prim(int root) {

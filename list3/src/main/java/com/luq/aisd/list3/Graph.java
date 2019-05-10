@@ -15,7 +15,7 @@ public class Graph {
     }
   }
 
-  public void addWeightEdge(int u, int v, int weight) {
+  public void addWeightEdge(int u, int v, float weight) {
     Edge edge = new Edge(u, v, weight);
     verticies.get(u).add(edge);
     e++;
@@ -48,8 +48,8 @@ public class Graph {
     return v;
   }
 
-  public int getSumOfWeights() {
-    int sum = 0;
+  public float getSumOfWeights() {
+    float sum = 0;
     for (int i = 0; i < v; i++) {
       for (Edge edge : verticies.get(i)) {
         sum += edge.getWeight();

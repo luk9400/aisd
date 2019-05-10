@@ -1,39 +1,39 @@
 package com.luq.aisd.list3;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Main {
 
-  private static Graph getGraph() {
-    Scanner scanner = null;
+  private static Graph loadGraphFromFile() {
     try {
-      scanner = new Scanner(new File("./graph2.txt"));
-    } catch (FileNotFoundException e) {
+      Scanner scanner = new Scanner(new File("./4graph.txt"));
+
+      int numOfVerticies = scanner.nextInt();
+      int e = scanner.nextInt();
+
+      Graph graph = new Graph(numOfVerticies);
+      scanner.nextLine();
+
+      for (int i = 0; i < e; i++) {
+        String input  = scanner.nextLine();
+        String[] line = input.split(" ");
+
+        int u = Integer.parseInt(line[0]);
+        int v = Integer.parseInt(line[1]);
+        float w = Float.parseFloat(line[2]);
+        graph.addWeightEdge(u, v, w);
+      }
+
+      return graph;
+    } catch (Exception e) {
       e.printStackTrace();
     }
-    //System.out.println("Number of verticies:");
-    int numOfVerticies = scanner.nextInt();
-    //System.out.println("Number of edges:");
-    int e = scanner.nextInt();
-
-    Graph graph = new Graph(numOfVerticies);
-
-    for (int i = 0; i < e; i++) {
-      int u, v, w;
-      u = scanner.nextInt();
-      v = scanner.nextInt();
-      w = scanner.nextInt();
-      graph.addWeightEdge(u, v, w);
-      //graph.addEdge(u, v);
-    }
-
-    return graph;
+    return null;
   }
 
   private static void dijkstra() {
-    Graph graph = getGraph();
+    Graph graph = loadGraphFromFile();
     Scanner scanner = new Scanner(System.in);
 
     System.out.println("Starting vertex:");
@@ -90,7 +90,7 @@ public class Main {
   }
 
   public static void kruskal() {
-    Graph graph = getGraph();
+    Graph graph = loadGraphFromFile();
 
     Kruskal kruskal = new Kruskal(graph);
 
@@ -98,7 +98,7 @@ public class Main {
   }
 
   public static void prim() {
-    Graph graph = getGraph();
+    Graph graph = loadGraphFromFile();
 
     Prim prim = new Prim(graph);
 
@@ -106,11 +106,10 @@ public class Main {
   }
 
   public static void ssc() {
-    Graph graph = getGraph();
+    Graph graph = loadGraphFromFile();
     SCC ssc = new SCC(graph);
 
     ssc.scc();
-
   }
 
   public static void main(String[] args) {
