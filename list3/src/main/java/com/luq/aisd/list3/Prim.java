@@ -9,23 +9,30 @@ public class Prim extends MST {
   }
 
   public void prim(int root) {
+    Boolean[] inMST = new Boolean[graph.getV()];
     PriorityQueue queue = new PriorityQueue();
+
     for (int i = 0; i < graph.getV(); i++) {
-      keys[i] = Integer.MAX_VALUE;
+      keys[i] = Float.MAX_VALUE;
       queue.insert(i, keys[i]);
+      inMST[i] = false;
     }
+
     keys[root] = 0;
     queue.priority(root, keys[root]);
     parent[root] = null;
+
     int sumOfWeights = 0;
     while (!queue.isEmpty()) {
       int u = queue.top().getKey();
+      inMST[u] = true;
       for (Edge edge : graph.getVerticies().get(u)) {
-        if (queue.contains(edge.getV()) && edge.getWeight() < keys[edge.getV()]) {
-          parent[edge.getV()] = edge.getU();
-          keys[edge.getV()] = edge.getWeight();
-          queue.priority(edge.getV(), keys[edge.getV()]);
-          System.out.println("u: " + u + ", v: " + edge.getV() + ", w: " + edge.getWeight());
+        int v = edge.getV();
+        if (queue.contains(v) && !inMST[v] && edge.getWeight() < keys[v]) {
+          parent[v] = edge.getU();
+          keys[v] = edge.getWeight();
+          queue.priority(v, keys[v]);
+          System.out.println("u: " + u + ", v: " + v + ", w: " + edge.getWeight());
           sumOfWeights += edge.getWeight();
         }
       }

@@ -24,7 +24,7 @@ public class Kruskal extends MST {
           A.addVertex(edge.getU());
           A.addWeightEdge(edge.getU(), edge.getV(), edge.getWeight());
           union(edge.getU(), edge.getV());
-          System.out.println("u: " + edge.getU() + ", v: " + edge.getV());
+          System.out.println("u: " + edge.getU() + ", v: " + edge.getV() + ", w: " + edge.getWeight());
         }
       }
     }

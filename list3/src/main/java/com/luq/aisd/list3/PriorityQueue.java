@@ -12,14 +12,6 @@ public class PriorityQueue {
   private int size = 0;
   private HashMap<Integer, Integer> map = new HashMap<>();
 
-  public ArrayList<Node> getQueue() {
-    return list;
-  }
-
-  public int getSize() {
-    return size;
-  }
-
   private int parent(int i) {
     return i >> 1;
   }
@@ -58,7 +50,7 @@ public class PriorityQueue {
     list.remove(size - 1);
     size--;
     heapify(0);
-    System.out.println("Pop: " + max.getKey() + " " + max.getPriority());
+    //System.out.println("Pop: " + max.getKey() + " " + max.getPriority());
     map.remove(max.getKey());
     return max;
   }
@@ -76,7 +68,7 @@ public class PriorityQueue {
       System.out.println("Top: null");
       return null;
     } else {
-      System.out.println("Top: " + list.get(0).getKey() + " " + list.get(0).getPriority());
+      //System.out.println("Top: " + list.get(0).getKey() + " " + list.get(0).getPriority());
       return list.get(0);
     }
   }
