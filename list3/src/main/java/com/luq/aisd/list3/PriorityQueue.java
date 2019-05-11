@@ -107,8 +107,6 @@ public class PriorityQueue {
       int index = map.get(key);
       if (index != 1) {
         decreaseKey(index, priority);
-      } else {
-        decreaseKey(0, priority);
       }
     }
   }
