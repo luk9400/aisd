@@ -15,11 +15,11 @@ public class Kruskal extends MST {
     }
 
     for (int i = 0; i < graph.getV(); i++) {
-      graph.getVerticies().get(i).sort(Comparator.comparingDouble(Edge::getWeight));
+      graph.getVertices().get(i).sort(Comparator.comparingDouble(Edge::getWeight));
     }
 
     for (int i = 0; i < graph.getV(); i++) {
-      for (Edge edge : graph.getVerticies().get(i)) {
+      for (Edge edge : graph.getVertices().get(i)) {
         if (findSet(edge.getU()) != findSet(edge.getV())) {
           A.addVertex(edge.getU());
           A.addWeightEdge(edge.getU(), edge.getV(), edge.getWeight());

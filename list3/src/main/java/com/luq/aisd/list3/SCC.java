@@ -21,7 +21,7 @@ public class SCC {
   private void dfsVisit(Graph graph, int u) {
     color[u] = 'g';
     d[u] = ++time;
-    for (Edge edge : graph.getVerticies().get(u)) {
+    for (Edge edge : graph.getVertices().get(u)) {
       if (color[edge.getV()] == 'w') {
         prev[edge.getV()] = u;
         dfsVisit(graph, edge.getV());
@@ -35,7 +35,7 @@ public class SCC {
     color[u] = 'g';
     System.out.print(u + " ");
     //d[u] = ++time;
-    for (Edge edge : graph.getVerticies().get(u)) {
+    for (Edge edge : graph.getVertices().get(u)) {
       if (color[edge.getV()] == 'w') {
         prev[edge.getV()] = u;
         dfsVisitVerbose(graph, edge.getV());
