@@ -50,7 +50,7 @@ public class PriorityQueue {
     list.remove(size - 1);
     size--;
     heapify(0);
-    //System.out.println("Pop: " + max.getKey() + " " + max.getPriority());
+    System.out.println("Pop: " + max.getKey() + " " + max.getPriority());
     map.remove(max.getKey());
     return max;
   }
@@ -68,7 +68,7 @@ public class PriorityQueue {
       System.out.println("Top: null");
       return null;
     } else {
-      //System.out.println("Top: " + list.get(0).getKey() + " " + list.get(0).getPriority());
+      System.out.println("Top: " + list.get(0).getKey() + " " + list.get(0).getPriority());
       return list.get(0);
     }
   }
@@ -105,7 +105,11 @@ public class PriorityQueue {
   public void priority(int key, float priority) {
     if (map.get(key) != null) {
       int index = map.get(key);
-      decreaseKey(index, priority);
+      if (index != 1) {
+        decreaseKey(index, priority);
+      } else {
+        decreaseKey(0, priority);
+      }
     }
   }
 

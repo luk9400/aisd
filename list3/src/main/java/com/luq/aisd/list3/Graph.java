@@ -32,6 +32,15 @@ public class Graph {
     v++;
   }
 
+  public float getEdgeWeight(int u, int v) {
+    for (Edge edge : adj.get(u)) {
+      if (edge.getV() == v) {
+        return edge.getWeight();
+      }
+    }
+    return -1;
+  }
+
   public ArrayList<ArrayList<Edge>> getAdj() {
     return adj;
   }
