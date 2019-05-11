@@ -26,7 +26,7 @@ public class Prim extends MST {
     while (!queue.isEmpty()) {
       int u = queue.top().getKey();
       inMST[u] = true;
-      for (Edge edge : graph.getVertices().get(u)) {
+      for (Edge edge : graph.getAdj().get(u)) {
         int v = edge.getV();
         if (queue.contains(v) && !inMST[v] && edge.getWeight() < keys[v]) {
           parent[v] = edge.getU();

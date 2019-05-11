@@ -26,7 +26,7 @@ public class Dijkstra {
     while (!queue.isEmpty()) {
       int u = queue.top().getKey();
       set.add(u);
-      for (Edge edge : graph.getVertices().get(u)) {
+      for (Edge edge : graph.getAdj().get(u)) {
         relax(edge);
       }
       queue.pop();

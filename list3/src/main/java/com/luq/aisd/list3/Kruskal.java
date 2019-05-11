@@ -1,5 +1,6 @@
 package com.luq.aisd.list3;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Kruskal extends MST {
@@ -10,24 +11,24 @@ public class Kruskal extends MST {
 
   public Graph kruskal() {
     A = new Graph(0);
+    ArrayList<Edge> edges = new ArrayList<>();
+
     for (int i = 0; i < graph.getV(); i++) {
       makeSet(i);
+      edges.addAll(graph.getAdj().get(i));
+      A.addVertex(i);
     }
 
-    for (int i = 0; i < graph.getV(); i++) {
-      graph.getVertices().get(i).sort(Comparator.comparingDouble(Edge::getWeight));
-    }
+    edges.sort(Comparator.comparingDouble(Edge::getWeight));
 
-    for (int i = 0; i < graph.getV(); i++) {
-      for (Edge edge : graph.getVertices().get(i)) {
-        if (findSet(edge.getU()) != findSet(edge.getV())) {
-          A.addVertex(edge.getU());
-          A.addWeightEdge(edge.getU(), edge.getV(), edge.getWeight());
-          union(edge.getU(), edge.getV());
-          System.out.println("u: " + edge.getU() + ", v: " + edge.getV() + ", w: " + edge.getWeight());
-        }
+    for (Edge edge : edges) {
+      if (findSet(edge.getU()) != findSet(edge.getV())) {
+        A.addWeightEdge(edge.getU(), edge.getV(), edge.getWeight());
+        union(edge.getU(), edge.getV());
+        System.out.println("u: " + edge.getU() + ", v: " + edge.getV() + ", w: " + edge.getWeight());
       }
     }
+
     System.out.println("Sum of weights: " + A.getSumOfWeights());
     return A;
   }
