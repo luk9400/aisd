@@ -7,7 +7,7 @@ public class Main {
 
   private static Graph loadGraphFromFile() {
     try {
-      Scanner scanner = new Scanner(new File("./2graph.txt"));
+      Scanner scanner = new Scanner(new File("./3graph.txt"));
 
       int numOfVerticies = scanner.nextInt();
       int e = scanner.nextInt();
@@ -113,9 +113,9 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    dijkstra();
+    //dijkstra();
     //priorityQueue();
-    //kruskal();
+    kruskal();
     //prim();
     //ssc();
   }
