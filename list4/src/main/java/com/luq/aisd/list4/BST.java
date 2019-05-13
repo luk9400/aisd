@@ -75,8 +75,8 @@ public class BST {
   }
 
   public Node minimum(Node x) {
-    while (x.getRight() != null) {
-      x = x.getRight();
+    while (x.getLeft() != null) {
+      x = x.getLeft();
     }
     return x;
   }
