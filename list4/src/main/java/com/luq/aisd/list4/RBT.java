@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class RBT {
+public class RBT implements BinaryTree {
   private RBNode guard = new RBNode(null);
   private RBNode root = guard;
 
@@ -116,6 +116,10 @@ public class RBT {
     z.setRight(guard);
     z.setColor(RBNode.Color.RED);
     insertFixup(z);
+  }
+
+  public void inorder() {
+    inorder(root);
   }
 
   public void inorder(RBNode x) {
@@ -262,26 +266,5 @@ public class RBT {
 
   public RBNode getRoot() {
     return root;
-  }
-
-  public static RBT load(String filename) {
-    RBT rbt = new RBT();
-    try {
-      Scanner scanner = new Scanner(new File("./" + filename));
-
-      while (scanner.hasNextLine()) {
-        String line = scanner.nextLine();
-        String[] strings = line.split(" ");
-
-        for (String str : strings) {
-          rbt.insert(str);
-        }
-
-      }
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      System.out.println("File not found!");
-    }
-    return rbt;
   }
 }

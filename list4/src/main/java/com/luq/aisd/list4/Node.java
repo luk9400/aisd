@@ -17,10 +17,6 @@ public class Node {
     return key;
   }
 
-  public void setKey(String key) {
-    this.key = key;
-  }
-
   public Node getParent() {
     return parent;
   }
