@@ -1,5 +1,7 @@
 package com.luq.aisd.list4;
 
+import java.util.Stack;
+
 public class BST implements BinaryTree{
   protected Node root;
 
@@ -38,7 +40,7 @@ public class BST implements BinaryTree{
   }
 
   public void inorder() {
-    inorder(root);
+    iterativeInorder(root);
   }
 
   public void inorder(Node x) {
@@ -46,6 +48,26 @@ public class BST implements BinaryTree{
       inorder(x.getLeft());
       System.out.println(x.getKey());
       inorder(x.getRight());
+    }
+  }
+
+  public void iterativeInorder(Node x) {
+    if (x == null) {
+      return;
+    }
+
+    Stack<Node> stack = new Stack<>();
+    Node current = x;
+
+    while (current != null || stack.size() > 0) {
+      while (current != null) {
+        stack.push(current);
+        current = current.getLeft();
+      }
+
+      current = stack.pop();
+      System.out.println(current.getKey());
+      current = current.getRight();
     }
   }
 
@@ -137,18 +159,6 @@ public class BST implements BinaryTree{
     }
 
     return z;
-  }
-
-  private String reduceString(String str) {
-    StringBuilder result = new StringBuilder();
-
-    for (char c : str.toCharArray()) {
-      if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) {
-        result.append(c);
-      }
-    }
-
-    return result.toString();
   }
 
   public Node getRoot() {

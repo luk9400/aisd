@@ -3,6 +3,7 @@ package com.luq.aisd.list4;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class RBT implements BinaryTree {
   private RBNode guard = new RBNode(null);
@@ -119,7 +120,7 @@ public class RBT implements BinaryTree {
   }
 
   public void inorder() {
-    inorder(root);
+    iterativeInorder(root);
   }
 
   public void inorder(RBNode x) {
@@ -127,6 +128,26 @@ public class RBT implements BinaryTree {
       inorder(x.getLeft());
       System.out.println(x.getKey());
       inorder(x.getRight());
+    }
+  }
+
+  public void iterativeInorder(RBNode x) {
+    if (x == null) {
+      return;
+    }
+
+    Stack<RBNode> stack = new Stack<>();
+    RBNode current = x;
+
+    while (current != guard || stack.size() > 0) {
+      while (current != guard) {
+        stack.push(current);
+        current = current.getLeft();
+      }
+
+      current = stack.pop();
+      System.out.println(current.getKey());
+      current = current.getRight();
     }
   }
 

@@ -2,6 +2,7 @@ package com.luq.aisd.list4;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Scanner;
 
 public interface BinaryTree {
@@ -10,14 +11,17 @@ public interface BinaryTree {
   void inorder();
   default void load(String filename) {
     try {
-      Scanner scanner = new Scanner(new File("./" + filename));
+      Scanner scanner = new Scanner(new FileReader("./" + filename));
 
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
-        String[] strings = line.split(" ");
+        String[] strings = line.split("[ ,;:]");
 
         for (String str : strings) {
-          insert(str);
+          if (str != null && !str.equals("")) {
+            //System.out.println(str);
+            insert(StringReducer.reduceString(str));
+          }
         }
 
       }
