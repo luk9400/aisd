@@ -1,6 +1,5 @@
 package com.luq.aisd.list4;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
@@ -19,11 +18,9 @@ public interface BinaryTree {
 
         for (String str : strings) {
           if (str != null && !str.equals("")) {
-            //System.out.println(str);
             insert(StringReducer.reduceString(str));
           }
         }
-
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
