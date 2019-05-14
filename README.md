@@ -18,8 +18,11 @@ Kolejka priorytetowa i algorytmy grafowe:
 - Kurskal i Prim
 - SCC
 
-## Lista 3
+## Lista 4
 Drzewa:
 - BST
 - RBT
 - Splay
+
+## Lista 5
+Przepływy w grafie
