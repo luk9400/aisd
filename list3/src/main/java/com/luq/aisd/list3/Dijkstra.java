@@ -24,13 +24,12 @@ public class Dijkstra {
     }
 
     while (!queue.isEmpty()) {
-      // old version was top()
-      int u = queue.pop().getKey();
+      int u = queue.top().getKey();
       set.add(u);
       for (Edge edge : graph.getAdj().get(u)) {
         relax(edge);
       }
-      //queue.pop();
+      queue.pop();
       System.out.println("Id: " + u + ", weight: " + distance[u]);
       printPath(u);
     }
