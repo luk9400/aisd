@@ -96,7 +96,7 @@ public class PriorityQueue {
       return;
     }
     list.get(i).setPriority(priority);
-    while (i >= 0 && list.get(parent(i)).getPriority() > list.get(i).getPriority()) {
+    while (list.get(parent(i)).getPriority() > list.get(i).getPriority()) {
       swap(i, parent(i));
       i = parent(i);
     }
@@ -105,7 +105,7 @@ public class PriorityQueue {
   public void priority(int key, float priority) {
     if (map.get(key) != null) {
       int index = map.get(key);
-      if (index != 1) {
+      if (index < list.size()) {
         decreaseKey(index, priority);
       }
     }
