@@ -19,7 +19,7 @@ public class BST implements BinaryTree{
 
     while (x != null) {
       y = x;
-      if (z.getKey().compareToIgnoreCase(x.getKey()) < 0) {
+      if (z.getKey().compareTo(x.getKey()) < 0) {
         x = x.getLeft();
       } else {
         x = x.getRight();
@@ -30,7 +30,7 @@ public class BST implements BinaryTree{
 
     if (y == null) {
       root = z;
-    } else if (z.getKey().compareToIgnoreCase(y.getKey()) < 0) {
+    } else if (z.getKey().compareTo(y.getKey()) < 0) {
       y.setLeft(z);
     } else {
       y.setRight(z);
@@ -71,6 +71,10 @@ public class BST implements BinaryTree{
     }
   }
 
+  public void search(String key) {
+    System.out.println(search(root, key));
+  }
+
   /**
    * Iterative approach of searching
    * @param x
@@ -79,7 +83,7 @@ public class BST implements BinaryTree{
    */
   public Boolean search(Node x, String key) {
     while (x != null && !key.equals(x.getKey())) {
-      if (key.compareToIgnoreCase(x.getKey()) < 0) {
+      if (key.compareTo(x.getKey()) < 0) {
         x = x.getLeft();
       } else {
         x = x.getRight();
@@ -91,7 +95,7 @@ public class BST implements BinaryTree{
 
   public Node searchNode(Node x, String key) {
     while (x != null && !key.equals(x.getKey())) {
-      if (key.compareToIgnoreCase(x.getKey()) < 0) {
+      if (key.compareTo(x.getKey()) < 0) {
         x = x.getLeft();
       } else {
         x = x.getRight();

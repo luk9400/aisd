@@ -1,8 +1,5 @@
 package com.luq.aisd.list4;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.util.Stack;
 
 public class RBT implements BinaryTree {
@@ -97,7 +94,7 @@ public class RBT implements BinaryTree {
     RBNode x = root;
     while (x != guard) {
       y = x;
-      if (z.getKey().compareToIgnoreCase(x.getKey()) < 0) {
+      if (z.getKey().compareTo(x.getKey()) < 0) {
         x = x.getLeft();
       } else {
         x = x.getRight();
@@ -107,7 +104,7 @@ public class RBT implements BinaryTree {
 
     if (y == guard) {
       root = z;
-    } else if (z.getKey().compareToIgnoreCase(y.getKey()) < 0) {
+    } else if (z.getKey().compareTo(y.getKey()) < 0) {
       y.setLeft(z);
     } else {
       y.setRight(z);
@@ -261,9 +258,13 @@ public class RBT implements BinaryTree {
     return x;
   }
 
+  public void search(String key) {
+    System.out.println(search(root, key));
+  }
+
   public Boolean search(RBNode x, String key) {
     while (x != guard && !key.equals(x.getKey())) {
-      if (key.compareToIgnoreCase(x.getKey()) < 0) {
+      if (key.compareTo(x.getKey()) < 0) {
         x = x.getLeft();
       } else {
         x = x.getRight();
@@ -275,7 +276,7 @@ public class RBT implements BinaryTree {
 
   public RBNode searchNode(RBNode x, String key) {
     while (x != guard && !key.equals(x.getKey())) {
-      if (key.compareToIgnoreCase(x.getKey()) < 0) {
+      if (key.compareTo(x.getKey()) < 0) {
         x = x.getLeft();
       } else {
         x = x.getRight();

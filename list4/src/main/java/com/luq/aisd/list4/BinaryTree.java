@@ -7,6 +7,7 @@ import java.util.Scanner;
 public interface BinaryTree {
   void insert(String key);
   void delete(String key);
+  void search(String key);
   void inorder();
   default void load(String filename) {
     try {
