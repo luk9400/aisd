@@ -73,16 +73,19 @@ public class Main {
           case "bst": {
             BST bst = new BST();
             program(bst);
+            bst.printStats();
             break;
           }
           case "rbt": {
             RBT rbt = new RBT();
             program(rbt);
+            rbt.printStats();
             break;
           }
           case "splay": {
             Splay splay = new Splay();
             program(splay);
+            splay.printStats();
             break;
           }
           default: {
