@@ -1,10 +1,19 @@
 package com.luq.aisd.list4;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Scanner;
+import java.io.IOException;
 
 public abstract class BinaryTree {
+  public long getComparations() {
+    return comparations;
+  }
+
+  public long getModifications() {
+    return modifications;
+  }
+
   protected long comparations = 0;
   protected long modifications = 0;
   protected int numberOfElements = 0;
@@ -19,10 +28,10 @@ public abstract class BinaryTree {
   abstract void inorder();
   public void load(String filename) {
     try {
-      Scanner scanner = new Scanner(new FileReader("./" + filename));
+      BufferedReader reader = new BufferedReader(new FileReader("./" + filename));
 
-      while (scanner.hasNextLine()) {
-        String line = scanner.nextLine();
+      String line;
+      while ((line = reader.readLine()) != null) {
         String[] strings = line.split("[ ,;:]");
 
         for (String str : strings) {
@@ -34,6 +43,52 @@ public abstract class BinaryTree {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       System.out.println("File not found!");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void searchLoaded(String filename) {
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader("./" + filename));
+
+      String line;
+      while ((line = reader.readLine()) != null) {
+        String[] strings = line.split("[ ,;:]");
+
+        for (String str : strings) {
+          if (str != null && !str.equals("")) {
+            search(StringReducer.reduceString(str));
+          }
+        }
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      System.out.println("File not found!");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void deleteLoaded(String filename) {
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader("./" + filename));
+
+      String line;
+      while ((line = reader.readLine()) != null) {
+        String[] strings = line.split("[ ,;:]");
+
+        for (String str : strings) {
+          if (str != null && !str.equals("")) {
+            delete(StringReducer.reduceString(str));
+          }
+        }
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      System.out.println("File not found!");
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
@@ -45,5 +100,10 @@ public abstract class BinaryTree {
     System.out.println("Searches: " + searches);
     System.out.println("Inserts: " + inserts);
     System.out.println("Deletes: " + deletes);
+  }
+
+  public void resetCounters() {
+    comparations = 0;
+    modifications = 0;
   }
 }

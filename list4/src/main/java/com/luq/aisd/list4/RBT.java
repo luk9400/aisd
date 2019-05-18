@@ -83,6 +83,8 @@ public class RBT extends BinaryTree {
           z.getParent().setColor(RBNode.Color.BLACK);
           y.setColor(RBNode.Color.BLACK);
           z.getParent().getParent().setColor(RBNode.Color.RED);
+          z = z.getParent().getParent();
+          // fix ^
           modifications += 3;
         } else {
           comparations++;
@@ -102,6 +104,8 @@ public class RBT extends BinaryTree {
           z.getParent().setColor(RBNode.Color.BLACK);
           y.setColor(RBNode.Color.BLACK);
           z.getParent().getParent().setColor(RBNode.Color.RED);
+          z = z.getParent().getParent();
+          // fix ^
           modifications += 3;
         } else {
           comparations++;
@@ -346,11 +350,15 @@ public class RBT extends BinaryTree {
   }
 
   public void search(String key) {
-    System.out.println(search(root, key));
+    //System.out.println(search(root, key));
+    search(root, key);
+    searches++;
   }
 
   public Boolean search(RBNode x, String key) {
+    comparations += 2;
     while (x != guard && !key.equals(x.getKey())) {
+      comparations += 3;
       if (key.compareTo(x.getKey()) < 0) {
         x = x.getLeft();
       } else {

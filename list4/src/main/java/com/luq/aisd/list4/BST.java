@@ -85,7 +85,8 @@ public class BST extends BinaryTree{
   }
 
   public void search(String key) {
-    System.out.println(search(root, key));
+    //System.out.println(search(root, key));
+    search(root, key);
     searches++;
   }
 
@@ -96,7 +97,9 @@ public class BST extends BinaryTree{
    * @return
    */
   public Boolean search(Node x, String key) {
+    comparations += 2;
     while (x != null && !key.equals(x.getKey())) {
+      comparations += 3;
       if (key.compareTo(x.getKey()) < 0) {
         x = x.getLeft();
       } else {

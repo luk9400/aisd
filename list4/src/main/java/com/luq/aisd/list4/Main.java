@@ -1,5 +1,8 @@
 package com.luq.aisd.list4;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -57,6 +60,17 @@ public class Main {
           tree.inorder();
           break;
         }
+        case "test": {
+          System.out.println("Number of tests: ");
+          int num = scanner.nextInt();
+          System.out.println("Starting tests");
+          try {
+            runTests(tree, num);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+          break;
+        }
         default: {
           System.out.println("No such command");
         }
@@ -64,6 +78,58 @@ public class Main {
     }
   }
 
+  public static void runTests(BinaryTree tree, int numberOfTests) throws IOException {
+    String treeType = tree.getClass().getSimpleName();
+    String[] fileNames = {"aspell_wordlist", "kjb", "lotr", "sample"};
+    for (String fileName : fileNames) {
+      System.out.println(fileName);
+
+      FileWriter writer = new FileWriter(new File(treeType + "_" + fileName + ".csv"));
+      writer.append("insert_time;insert_comparations;insert_modifications;" +
+              "search_time;search_comparations;search_modifications;" +
+              "delete_time;delete_comparations;delete_modifications\n");
+      long start;
+      long end;
+
+      for (int i = 0; i < numberOfTests; i++) {
+
+        System.out.println("Loading");
+        tree.resetCounters();
+        start = System.nanoTime();
+        tree.load(fileName + ".txt");
+        end = System.nanoTime();
+
+        writer.append(String.valueOf((end - start) / 1000000000d)).append(";");
+        writer.append(String.valueOf(tree.getComparations())).append(";");
+        writer.append(String.valueOf(tree.getModifications())).append(";");
+
+        System.out.println("Searching");
+        tree.resetCounters();
+        start = System.nanoTime();
+        tree.searchLoaded(fileName + ".txt");
+        end = System.nanoTime();
+
+        writer.append(String.valueOf((end - start) / 1000000000d)).append(";");
+        writer.append(String.valueOf(tree.getComparations())).append(";");
+        writer.append(String.valueOf(tree.getModifications())).append(";");
+
+        System.out.println("Deleting");
+        tree.resetCounters();
+        start = System.nanoTime();
+        tree.deleteLoaded(fileName + ".txt");
+        end = System.nanoTime();
+
+        writer.append(String.valueOf((end - start) / 1000000000d)).append(";");
+        writer.append(String.valueOf(tree.getComparations())).append(";");
+        writer.append(String.valueOf(tree.getModifications())).append(";");
+
+        writer.append("\n");
+      }
+      writer.flush();
+      writer.close();
+    }
+    System.out.println("Tests done");
+  }
 
   public static void main(String[] args) {
 

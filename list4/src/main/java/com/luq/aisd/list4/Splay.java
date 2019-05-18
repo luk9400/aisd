@@ -234,4 +234,19 @@ public class Splay extends BST {
 
     return node;
   }
+
+  @Override
+  public Boolean search(Node x, String key) {
+    Node node = super.searchNode(x, key);
+    comparations++;
+    if (node != null) {
+      comparations++;
+      while (node.getParent() != null) {
+        comparations++;
+        splay(node);
+      }
+    }
+
+    return node != null;
+  }
 }
