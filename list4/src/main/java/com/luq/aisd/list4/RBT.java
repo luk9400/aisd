@@ -219,77 +219,75 @@ public class RBT extends BinaryTree {
   }
 
   private void deleteFixup(RBNode x) {
-    RBNode w;
-
-    comparations++;
-    while (x != root && x.getColor() == RBNode.Color.BLACK) {
-      comparations += 2;
+    comparations += 2;
+    while (x != this.root && x.getColor() == RBNode.Color.BLACK) {
+      comparations += 3;
       if (x == x.getParent().getLeft()) {
-        w = x.getParent().getRight();
+        RBNode w = x.getParent().getRight();
         comparations++;
         if (w.getColor() == RBNode.Color.RED) {
+          modifications += 2;
           w.setColor(RBNode.Color.BLACK);
           x.getParent().setColor(RBNode.Color.RED);
-          modifications += 2;
           leftRotate(x.getParent());
           w = x.getParent().getRight();
         }
-        comparations++;
+        comparations += 2;
         if (w.getLeft().getColor() == RBNode.Color.BLACK && w.getRight().getColor() == RBNode.Color.BLACK) {
+          modifications++;
           w.setColor(RBNode.Color.RED);
           x = x.getParent();
-          modifications++;
         } else {
           comparations++;
           if (w.getRight().getColor() == RBNode.Color.BLACK) {
+            modifications += 2;
             w.getLeft().setColor(RBNode.Color.BLACK);
             w.setColor(RBNode.Color.RED);
-            modifications += 2;
             rightRotate(w);
             w = x.getParent().getRight();
           }
+          modifications += 3;
           w.setColor(x.getParent().getColor());
           x.getParent().setColor(RBNode.Color.BLACK);
           w.getRight().setColor(RBNode.Color.BLACK);
           leftRotate(x.getParent());
-          x = root;
-          modifications += 3;
+          x = this.root;
         }
       } else {
-        w = x.getParent().getLeft();
+        RBNode w = x.getParent().getLeft();
         comparations++;
         if (w.getColor() == RBNode.Color.RED) {
+          modifications += 2;
           w.setColor(RBNode.Color.BLACK);
           x.getParent().setColor(RBNode.Color.RED);
-          modifications += 2;
           rightRotate(x.getParent());
           w = x.getParent().getLeft();
         }
         comparations++;
         if (w.getRight().getColor() == RBNode.Color.BLACK && w.getLeft().getColor() == RBNode.Color.BLACK) {
+          modifications++;
           w.setColor(RBNode.Color.RED);
           x = x.getParent();
-          modifications++;
         } else {
           comparations++;
           if (w.getLeft().getColor() == RBNode.Color.BLACK) {
+            modifications += 2;
             w.getRight().setColor(RBNode.Color.BLACK);
             w.setColor(RBNode.Color.RED);
-            modifications += 2;
             leftRotate(w);
             w = x.getParent().getLeft();
           }
+          modifications += 3;
           w.setColor(x.getParent().getColor());
           x.getParent().setColor(RBNode.Color.BLACK);
           w.getLeft().setColor(RBNode.Color.BLACK);
           rightRotate(x.getParent());
-          x = root;
-          modifications += 3;
+          x = this.root;
         }
       }
-      x.setColor(RBNode.Color.BLACK);
-      modifications++;
     }
+    modifications++;
+    x.setColor(RBNode.Color.BLACK);
   }
 
   public void delete(String key) {
