@@ -1,8 +1,8 @@
 package com.luq.aisd.list4;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Main {
@@ -26,6 +26,36 @@ public class Main {
     splay.load("KJB.txt");
     System.out.println("done");
     splay.inorder();
+  }
+
+  public static void permute(String filename) {
+    ArrayList<String> words = new ArrayList<>();
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader("./" + filename));
+
+      String line;
+      while ((line = reader.readLine()) != null) {
+        String[] strings = line.split("[ ,;:]");
+
+        for (String str : strings) {
+          if (str != null && !str.equals("")) {
+            words.add(str);
+          }
+        }
+      }
+
+      Collections.shuffle(words);
+
+      FileWriter writer = new FileWriter(new File("permutation.txt"));
+      for (String str : words) {
+        writer.append(str).append(" ");
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      System.out.println("File not found!");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public static void program(BinaryTree tree) {
@@ -80,7 +110,7 @@ public class Main {
 
   public static void runTests(BinaryTree tree, int numberOfTests) throws IOException {
     String treeType = tree.getClass().getSimpleName();
-    String[] fileNames = {"aspell_wordlist", "KJB", "lotr", "sample"};
+    String[] fileNames = {"aspell", "KJB", "lotr", "sample", "permutation"};
     for (String fileName : fileNames) {
       System.out.println(fileName);
 
@@ -92,6 +122,11 @@ public class Main {
       long end;
 
       for (int i = 0; i < numberOfTests; i++) {
+        System.out.println(i);
+
+        if (fileName.equals("permutation")) {
+          permute("lotr.txt");
+        }
 
         System.out.println("Loading");
         tree.resetCounters();
