@@ -230,6 +230,24 @@
     \subsection{Preferowane rodzaje danych}
         \subsubsection{BST}
             BST najgorzej współgra z danymi posortowanymi - drzewo jest wtedy degenerowane do listy. Aby temu zapobiec dane powinny być podawane w takiej kolejności aby wynikowe drzewo było jak najbardziej zbalansowane. Pozwoli to uzyskać rzeczywistą złożoność logarytmiczną. Dane takie można uzyskać sczytując je wiersz po wierszu z drzewa RBT.
+            
+            \begin{table}[h]
+            \centering
+            \caption{Czasy [s] dla najlepszych danych dla BST}
+            \label{tab:pbst}
+            \begin{tabular}{|c|c|c|c|} \hline
+            		Operacja & BST & RBT & Splay \\
+            		\hline
+            		Insert & 0,070 & 0,065 & 0,022 \\
+            		\hline
+            		Search & 0,034 & 0,039 & 0,036 \\
+            	    \hline
+            		Delete & 0,032 & 0,035 & 0,024 \\
+            		\hline
+            	
+            \end{tabular}
+            \end{table}
+            
         \subsubsection{RBT}
             Z testów wynika, że RBT spisuje się świetnie dla każdych danych. Najmniej porównań oraz modyfikacji wykonuje jednak na danych posortowanych.
         \subsubsection{Splay}

@@ -110,7 +110,7 @@ public class Main {
 
   public static void runTests(BinaryTree tree, int numberOfTests) throws IOException {
     String treeType = tree.getClass().getSimpleName();
-    String[] fileNames = {"aspell", "KJB", "lotr", "sample", "permutation"};
+    String[] fileNames = {"pbst"};
     for (String fileName : fileNames) {
       System.out.println(fileName);
 
