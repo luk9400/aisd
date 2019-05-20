@@ -5,9 +5,9 @@ import java.util.Scanner;
 
 public class Main {
 
-  private static Graph loadGraphFromFile() {
+  private static Graph loadGraphFromFile(String filename) {
     try {
-      Scanner scanner = new Scanner(new File("./2graph.txt"));
+      Scanner scanner = new Scanner(new File(filename));
 
       int numOfVerticies = scanner.nextInt();
       int e = scanner.nextInt();
@@ -32,8 +32,8 @@ public class Main {
     return null;
   }
 
-  private static void dijkstra() {
-    Graph graph = loadGraphFromFile();
+  private static void dijkstra(String filename) {
+    Graph graph = loadGraphFromFile(filename);
     Scanner scanner = new Scanner(System.in);
 
     System.out.println("Starting vertex:");
@@ -89,34 +89,72 @@ public class Main {
     }
   }
 
-  public static void kruskal() {
-    Graph graph = loadGraphFromFile();
+  public static void kruskal(String filename) {
+    Graph graph = loadGraphFromFile(filename);
 
     Kruskal kruskal = new Kruskal(graph);
 
     kruskal.kruskal();
   }
 
-  public static void prim() {
-    Graph graph = loadGraphFromFile();
+  public static void prim(String filename) {
+    Graph graph = loadGraphFromFile(filename);
 
     Prim prim = new Prim(graph);
 
     prim.prim(0);
   }
 
-  public static void ssc() {
-    Graph graph = loadGraphFromFile();
-    SCC ssc = new SCC(graph);
+  public static void scc(String filename) {
+    Graph graph = loadGraphFromFile(filename);
+    SCC scc = new SCC(graph);
 
-    ssc.scc();
+    scc.scc();
   }
 
   public static void main(String[] args) {
-    dijkstra();
+    //dijkstra();
     //priorityQueue();
     //kruskal();
     //prim();
-    //ssc();
+    //scc();
+
+    if (args.length >= 1) {
+      Scanner scanner = new Scanner(System.in);
+      switch (args[0]) {
+        case "queue": {
+          priorityQueue();
+          break;
+        }
+        case "dijkstra": {
+          System.out.println("Specify a file: ");
+          String filename = scanner.next();
+          dijkstra(filename);
+          break;
+        }
+        case "kruskal": {
+          System.out.println("Specify a file: ");
+          String filename = scanner.next();
+          kruskal(filename);
+          break;
+        }
+        case "prim": {
+          System.out.println("Specify a file: ");
+          String filename = scanner.next();
+          prim(filename);
+          break;
+        }
+        case "scc": {
+          System.out.println("Specify a file: ");
+          String filename = scanner.next();
+          scc(filename);
+          break;
+        }
+        default: {
+          System.out.println("Wrong argument");
+          break;
+        }
+      }
+    }
   }
 }
