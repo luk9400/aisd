@@ -119,9 +119,9 @@ public class MaxFlow {
     return log + (bits >>> 1);
   }
 
-  public void glpk() {
+  public void glpk(String filename) {
     try {
-      FileWriter fileWriter = new FileWriter(new File("maxFlow.mod"));
+      FileWriter fileWriter = new FileWriter(new File(filename + ".mod"));
       PrintWriter pw = new PrintWriter(fileWriter);
       pw.print("param n, integer, >= 2;\n" +
               "/* number of nodes */\n" +
@@ -185,6 +185,56 @@ public class MaxFlow {
       fileWriter.close();
     } catch (IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  public static void flowTest(int reps) {
+    try {
+      FileWriter writer = new FileWriter(new File("statsFlow.csv"));
+
+      writer.append("i;flow;paths;time;\n");
+
+      System.out.println("Starting tests");
+      for (int i = 1; i <= 16; i++) {
+        System.out.println(i);
+        double avgFlow = 0;
+        double avgPaths = 0;
+        double avgTime = 0;
+
+        for (int j = 0; j < reps; j++) {
+          MaxFlow maxFlow = new MaxFlow(i);
+          long start = System.nanoTime();
+          maxFlow.edmondsKarp();
+          long end = System.nanoTime();
+          double time = (end - start) / 1000000000d;
+
+          avgFlow += maxFlow.getMaxFlow() / (reps * 1d);
+          avgPaths += maxFlow.getPaths() / (reps * 1d);
+          avgTime += time / reps;
+        }
+        writer.append(i + ";" + avgFlow + ";" + avgPaths + ";" + avgTime + ";\n");
+      }
+
+      writer.flush();
+      writer.close();
+      System.out.println("Done");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void main(String[] args) {
+    if (args.length > 1) {
+      int k = Integer.parseInt(args[0]);
+      MaxFlow maxFlow = new MaxFlow(k);
+      System.out.println("Max flow: " + maxFlow.edmondsKarp());
+      System.out.println("Paths: " + maxFlow.getPaths());
+      if (args.length > 2) {
+        if (args[1].equals("--glpk")) {
+          maxFlow.glpk(args[2]);
+          System.out.println("GLPK file generated");
+        }
+      }
     }
   }
 }

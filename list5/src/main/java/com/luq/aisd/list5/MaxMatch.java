@@ -96,9 +96,9 @@ public class MaxMatch {
     return f;
   }
 
-  public void glpk() {
+  public void glpk(String filename) {
     try {
-      FileWriter writer = new FileWriter(new File("maxMatch.mod"));
+      FileWriter writer = new FileWriter(new File(filename + ".mod"));
       PrintWriter pw = new PrintWriter(writer);
       pw.print("param n, integer, >= 2;\n" +
               "/* number of nodes */\n" +
@@ -159,6 +159,65 @@ public class MaxMatch {
       writer.close();
     } catch (IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  public static void matchTest(int reps) {
+    try {
+      FileWriter writerT = new FileWriter(new File("statsMatchTime.csv"));
+      FileWriter writerM = new FileWriter(new File("statsMatchMatches.csv"));
+
+      writerT.append("k;1;2;3;4;5;6;7;8;9;10;\n");
+      writerM.append("k;1;2;3;4;5;6;7;8;9;10;\n");
+
+      System.out.println("Starting tests");
+      for (int k = 3; k <= 10; k++) {
+        writerT.append(k + ";");
+        writerM.append(k + ";");
+        for (int i = 1; i <= k; i++) {
+          System.out.println("k: " + k + " i: " + i);
+          double avgMatches = 0;
+          double avgTime = 0;
+
+          for (int j = 0; j < reps; j++) {
+            MaxMatch maxMatch = new MaxMatch(k, i);
+            long start = System.nanoTime();
+            int matches = maxMatch.maxMatch();
+            long end = System.nanoTime();
+            double time = (end - start) / 1000000000d;
+
+            avgMatches += matches / (reps * 1d);
+            avgTime += time / reps;
+          }
+          writerT.append(avgTime + ";");
+          writerM.append(avgMatches + ";");
+        }
+        writerT.append("\n");
+        writerM.append("\n");
+      }
+
+      writerT.flush();
+      writerM.flush();
+      writerT.close();
+      writerM.close();
+      System.out.println("Done");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void main(String[] args) {
+    if (args.length > 1) {
+      int k = Integer.parseInt(args[0]);
+      int i = Integer.parseInt(args[1]);
+      MaxMatch maxMatch = new MaxMatch(k, i);
+      System.out.println("Max match: " + maxMatch.maxMatch());
+      if (args.length > 3) {
+        if (args[2].equals("--glpk")) {
+          maxMatch.glpk(args[3]);
+          System.out.println("GLPK file generated");
+        }
+      }
     }
   }
 }
