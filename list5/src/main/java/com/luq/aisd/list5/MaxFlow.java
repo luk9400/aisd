@@ -227,7 +227,10 @@ public class MaxFlow {
     if (args.length > 1) {
       int k = Integer.parseInt(args[0]);
       MaxFlow maxFlow = new MaxFlow(k);
+      long start = System.nanoTime();
       System.out.println("Max flow: " + maxFlow.edmondsKarp());
+      long end = System.nanoTime();
+      System.out.println("Time: " + (end - start) / 1000000000d);
       System.out.println("Paths: " + maxFlow.getPaths());
       if (args.length > 2) {
         if (args[1].equals("--glpk")) {

@@ -211,7 +211,10 @@ public class MaxMatch {
       int k = Integer.parseInt(args[0]);
       int i = Integer.parseInt(args[1]);
       MaxMatch maxMatch = new MaxMatch(k, i);
+      long start = System.nanoTime();
       System.out.println("Max match: " + maxMatch.maxMatch());
+      long end = System.nanoTime();
+      System.out.println("Time: " + (end - start) / 1000000000d);
       if (args.length > 3) {
         if (args[2].equals("--glpk")) {
           maxMatch.glpk(args[3]);
